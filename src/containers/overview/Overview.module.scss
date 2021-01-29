@@ -1,0 +1,20 @@
+@import "../../scss/variables";
+
+.block {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.metric-cards-cont {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: auto;
+  overflow: hidden;
+  @media (min-width: $medium-size) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}

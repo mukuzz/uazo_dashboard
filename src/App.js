@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 
 import { library, dom } from "@fortawesome/fontawesome-svg-core";
-import { faCog, faChartPie } from "@fortawesome/free-solid-svg-icons";
+import { faCog, faChartPie, faChartLine } from "@fortawesome/free-solid-svg-icons";
 
-import { Nav } from './containers';
+import { NavLayout, Overview } from './containers';
 
-library.add([faCog, faChartPie])
+library.add([faCog, faChartPie, faChartLine])
 dom.watch()
 
 class App extends Component {
   render() {
+    let content = <Overview />
     return (
-      <div>
-        <Nav/>
-      </div>
+      <NavLayout content={content}/>
     )
   }
 }

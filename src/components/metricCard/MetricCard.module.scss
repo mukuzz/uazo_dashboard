@@ -1,0 +1,38 @@
+.block {
+    display: flex;
+    flex-direction: row;
+    padding: 1.25rem 1.5rem;
+}
+
+.h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #262B40;
+    line-height: 1.3;
+    display: block;
+}
+
+.h3 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #262B40;
+    line-height: 1.3;
+    display: block;
+}
+
+.icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    min-width: 4.5rem;
+    margin-right: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #0948B3;
+    font-size: 2rem;
+    background-color: rgba(9, 72, 179, 0.3);
+}

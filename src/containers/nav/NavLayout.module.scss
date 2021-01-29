@@ -1,0 +1,14 @@
+@import "../../scss/_variables.scss";
+
+.block {
+    @media (min-width: $medium-size) {
+        display: flex;
+        flex-direction: row;
+    }   
+}
+
+.content {
+    width: 100%;
+    overflow-x: auto;
+    padding: .5rem;
+}

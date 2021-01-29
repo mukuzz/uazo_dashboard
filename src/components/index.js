@@ -1,3 +1,6 @@
 export {default as SideNav} from './nav/SideNav'
 export {default as TopNav} from './nav/TopNav'
 export {default as SideNavItem} from './nav/SideNavItem'
+export {default as Card} from './card/Card'
+export {default as MetricCard} from './metricCard/MetricCard'
+export {default as Table} from './table/Table'

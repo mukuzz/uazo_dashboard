@@ -6,8 +6,9 @@
     text-align: right;
     padding: 1rem 1.5rem;
     background-color: $primary-color;
+    z-index: 100;
 
-    @media (min-width: 768px) {
+    @media (min-width: $medium-size) {
         display: none !important;
     }
 }
