@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { MetricCard, Table } from '../../components';
+import { KeyStatsTable } from '..';
+import { MetricCard } from '../../components';
 import styles from './Overview.module.scss';
 
 class Overview extends Component {
@@ -28,22 +29,7 @@ class Overview extends Component {
             metricValue="121/99"
           />
         </div>
-        <Table
-          tableName="Table"
-          headings={["Table Heading","Table Heading","Table Heading","Table Heading","Table Heading","Table Heading","Table Heading","Table Heading","Table Heading","Table Heading"]}
-          items={[
-            ["sdfsd","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf"],
-            ["sdfsd","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf"],
-            ["sdfsd","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf"],
-            ["sdfsd","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf"],
-            ["sdfsd","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf"],
-            ["sdfsd","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf"],
-            ["sdfsd","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf"],
-            ["sdfsd","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf"],
-            ["sdfsd","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf"],
-            ["sdfsd","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf","sdfsdf","dsfsd","sdfds","sdfsdf"],
-          ]}
-        />
+        <KeyStatsTable />
       </div>
     );
   }
