@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table } from '../../components';
 
-const API_URL = "http://localhost:8000/api"
+const API_URL = process.env.REACT_APP_API_URL
 
 class KeyStatsTable extends Component {
   constructor(props) {
@@ -23,13 +23,16 @@ class KeyStatsTable extends Component {
     if (this.shouldRefresh) {
       this.shouldRefresh = false;
       fetch(`${API_URL}/production-session/active/`)
-      .then(res => res.json())
+      .then(res => {
+        if (res.status !== 200) return []
+        return res.json()
+      })
       .then(
         async (data) => {
           await data.forEach(async prod_sess => {
             let prod_stats
             try {
-              const res = await fetch(`${API_URL}/production-session/${prod_sess.id}/stats`)
+              const res = await fetch(`${API_URL}/production-session/${prod_sess.id}/stats/`)
               prod_stats = await res.json()
             } catch (error) {
               console.error(error)
@@ -50,7 +53,7 @@ class KeyStatsTable extends Component {
           this.shouldRefresh = true;
         },
         (error) => {
-          console.log(error)
+          console.error(error)
           this.shouldRefresh = true;
         }
       )
@@ -61,20 +64,17 @@ class KeyStatsTable extends Component {
       
   render() {
     let tableData = []
-    let last_line_number = ''
     for (const property in this.state) {
       if (property === "headings") continue
-      const row = this.state[property]
-      if (last_line_number === row[0]) row[0] = ''
-      tableData.push(row)
-      last_line_number = row[0]
+      tableData.push(this.state[property])
     }
-    tableData.sort((a,b) => a.line_number - b.line_number)
+    tableData = tableData.sort((a,b) => a[0] - b[0])
     return (
       <Table
+        hideConcurrentSameSrNo={true}
         tableName="Key Statistics"
         headings={this.state.headings}
-        items={tableData}
+        tableData={tableData}
       />
     );
   }
