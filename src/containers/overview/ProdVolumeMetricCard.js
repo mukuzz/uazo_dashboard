@@ -13,7 +13,7 @@ class ProdVolumeMetricCard extends Component {
 
   componentDidMount() {
     this.refresh()
-    setInterval(this.refresh, 10000)   
+    setInterval(this.refresh, 1000)   
   }
 
   refresh() {

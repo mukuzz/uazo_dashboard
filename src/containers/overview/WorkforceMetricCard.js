@@ -48,9 +48,6 @@ class WorkforceMetricCard extends Component {
                 helpers += element.helpers
               }
             }
-            console.log(workforce)
-            console.log(operators)
-            console.log(helpers)
             this.setState({
               "operators": operators,
               "helpers": helpers
