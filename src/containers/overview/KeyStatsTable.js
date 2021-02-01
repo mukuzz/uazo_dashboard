@@ -7,8 +7,8 @@ class KeyStatsTable extends Component {
   constructor(props) {
     super(props)
     this.state = {"headings": [
-      "line", "Shift", "Production", "Target", "Variance", "DHU", "FTT",
-      "Efficiency", "RTT", "Operators", "Helpers", "Style", "Buyer"
+      "line", "Shift", "Production", "Target", "Defective", "DHU", "FTT",
+      "Efficiency", "RTT", "Rectified" , "Rejected" ,"Operators", "Helpers", "Style", "Buyer"
     ]}
     this.refreshStats = this.refreshStats.bind(this)
     this.shouldRefresh = true;
@@ -42,9 +42,9 @@ class KeyStatsTable extends Component {
               [prod_sess.id]: [
                 prod_sess.line_number || '-', prod_stats.shift || '-',
                 prod_stats.output || '-', prod_sess.target || '-',
-                this.fmtFloat(prod_stats.variance) || '-', this.fmtFloat(prod_stats.dhu) || '-',
+                prod_stats.defective || '-', this.fmtFloat(prod_stats.dhu) || '-',
                 this.fmtFloat(prod_stats.ftt_rate) || '-', this.fmtFloat(prod_stats.line_efficiency) || '-',
-                this.fmtFloat(prod_stats.rtt) || '-',
+                this.fmtFloat(prod_stats.rtt) || '-', prod_stats.rectified || '-', prod_stats.rejected || '-',
                 prod_sess.operators || '-', prod_sess.helpers || '-',
                 prod_stats.style_number || '-', prod_stats.buyer || '-'
               ]

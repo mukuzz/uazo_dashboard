@@ -55,7 +55,7 @@ class WorkforceMetricCard extends Component {
           }
         },
         (error) => {
-          console.log(error)
+          console.error(error)
           this.shouldRefresh = true;
         }
       )

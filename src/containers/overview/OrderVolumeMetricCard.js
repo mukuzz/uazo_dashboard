@@ -13,7 +13,7 @@ class OrderVolumeMetricCard extends Component {
 
   componentDidMount() {
     this.refresh()
-    setInterval(this.refresh, 10000)   
+    setInterval(this.refresh, 10000)
   }
 
   refresh() {
@@ -32,7 +32,7 @@ class OrderVolumeMetricCard extends Component {
           }
         },
         (error) => {
-          console.log(error)
+          console.error(error)
           this.shouldRefresh = true;
         }
       )
