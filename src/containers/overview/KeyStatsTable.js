@@ -7,8 +7,8 @@ class KeyStatsTable extends Component {
   constructor(props) {
     super(props)
     this.state = {"headings": [
-      "line", "Shift", "Production", "Target", "Defective", "DHU", "FTT",
-      "Efficiency", "RTT", "Rectified" , "Rejected" ,"Operators", "Helpers", "Style", "Buyer"
+      "line", "Shift", "Target", "Production", "RTT", "Variance", "Projected", "DHU",
+      "Efficiency", "Defective", "Rectified" , "Rejected" ,"Operators", "Helpers", "Style", "Buyer"
     ]}
     this.refreshStats = this.refreshStats.bind(this)
     this.shouldRefresh = true;
@@ -40,13 +40,13 @@ class KeyStatsTable extends Component {
             }
             this.setState({
               [prod_sess.id]: [
-                prod_sess.line_number || '-', prod_stats.shift || '-',
-                prod_stats.output || '-', prod_sess.target || '-',
-                prod_stats.defective || '-', this.fmtFloat(prod_stats.dhu) || '-',
-                this.fmtFloat(prod_stats.ftt_rate) || '-', this.fmtFloat(prod_stats.line_efficiency) || '-',
-                this.fmtFloat(prod_stats.rtt) || '-', prod_stats.rectified || '-', prod_stats.rejected || '-',
-                prod_sess.operators || '-', prod_sess.helpers || '-',
-                prod_stats.style_number || '-', prod_stats.buyer || '-'
+                this.fmt(prod_sess.line_number), this.fmt(prod_stats.shift),
+                this.fmt(prod_sess.target), this.fmt(prod_stats.output),
+                this.fmt(prod_stats.rtt), this.fmt(prod_stats.rtt - prod_stats.output),
+                this.fmt(prod_stats.projected_output), this.fmt(this.fmtFloat(prod_stats.dhu)),
+                this.fmt(this.fmtFloat(prod_stats.line_efficiency)), this.fmt(prod_stats.defective),
+                this.fmt(prod_stats.rectified), this.fmt(prod_stats.rejected), this.fmt(prod_sess.operators),
+                this.fmt(prod_sess.helpers), this.fmt(prod_stats.style_number), this.fmt(prod_stats.buyer)
               ]
             })
           });
@@ -58,6 +58,12 @@ class KeyStatsTable extends Component {
         }
       )
     }
+  }
+
+  fmt(str) {
+    if (str === 0) str = "0"
+    str = str || '-'
+    return str.toLocaleString()
   }
 
   fmtFloat(num) { if (num !== undefined) return parseFloat(num).toFixed(2) }
