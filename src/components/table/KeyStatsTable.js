@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Table } from '../../components';
+import { Table } from '..';
 
 const API_URL = process.env.REACT_APP_API_URL
+const POLL_INTERVAL = process.env.REACT_APP_POLL_INTERVAL
 
 class KeyStatsTable extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class KeyStatsTable extends Component {
 
   componentDidMount() {
     this.refreshStats()
-    setInterval(this.refreshStats, 1000)   
+    setInterval(this.refreshStats, POLL_INTERVAL)
   }
 
   refreshStats() {

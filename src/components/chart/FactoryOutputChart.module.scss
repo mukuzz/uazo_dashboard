@@ -1,0 +1,57 @@
+@import "../../scss/variables";
+@import "../../scss/mixins";
+
+.block {
+  width: 100%;
+  background-color: $chart-background-color;
+  border: .0625rem solid rgba(46,54,80,.125);
+  border-radius: 0.5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: .0625rem solid rgba(46,54,80,.125);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 400;
+  display: block;
+}
+
+.filter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.button {
+  @include button-clear;
+  margin-left: .5rem;
+  font-weight: 600;
+  padding: .35rem .75rem;
+  font-size: .875rem;
+  text-align: center;
+  border-radius: 1rem;
+  color: #262b40;
+  background-color: #f3b773;
+  border-color: #f3b773;
+}
+
+.btn-dark {
+  background-color: #262b40;
+  border-color: #262b40;
+  color: #fff;
+}
+
+.chart {
+ padding: 0.5rem;
+ width: 100%;
+ min-height: 190px;
+ max-height: 512px;
+ height: 40vh;
+}

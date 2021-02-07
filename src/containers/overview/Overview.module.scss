@@ -8,13 +8,31 @@
 
 .metric-cards-cont {
   display: grid;
-  justify-content: center;
+  justify-content: stretch;
   grid-template-columns: auto;
-  overflow: hidden;
+  @media (min-width: 360px){
+    grid-template-columns: auto auto;
+  }
+  @media (min-width: 580px){
+    grid-template-columns: auto auto auto;
+  }
   @media (min-width: $medium-size) {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
+  }
+}
+
+.detail-cards-cont {
+  display: grid;
+  justify-content: stretch;
+  grid-template-columns: auto;
+  align-items: flex-start;
+  @media (min-width: 1024px) {
+    grid-template-columns: 50% 50%;
+  }
+  @media (min-width: 1600px) {
+    grid-template-columns: 40% 30% 30%;
   }
 }

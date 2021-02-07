@@ -3,6 +3,7 @@ import { Card } from '..';
 import styles from "./MetricCard.module.scss";
 
 const API_URL = process.env.REACT_APP_API_URL
+const POLL_INTERVAL = process.env.REACT_APP_POLL_INTERVAL
 
 class MetricCard extends Component {
 	constructor(props) {
@@ -14,22 +15,22 @@ class MetricCard extends Component {
 
 	componentDidMount() {
 		this.refresh()
-		setInterval(this.refresh, 1000)
+		setInterval(this.refresh, POLL_INTERVAL)
 	}
 
-	async refresh() {
+	refresh() {
 		if (this.shouldRefresh) {
 			this.shouldRefresh = false
 			fetch(`${API_URL}${this.props.uri}`)
       .then(res => {
-        if (res.status !== 200) return {}
+        if (res.status !== 200) return null
         return res.json()
       })
       .then(
         (data) => {
-          if (!(Object.keys(data).length === 0 && data.constructor === Object)) {
+          if (data) {
             this.setState({
-              "data": data.data
+              "data": this.props.extractData(data.data)
             })
           }
         },

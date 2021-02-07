@@ -1,9 +1,8 @@
 @mixin button-clear {
-    background: none;
+  background: none;
 	color: #ffffff;
 	border: none;
 	padding: 0;
 	cursor: pointer;
 	outline: inherit;
-    line-height: 0;
 }
