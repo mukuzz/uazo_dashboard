@@ -89,7 +89,7 @@ class ProductionOrdersProgress extends Component {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: true,
+        maintainAspectRatio: false,
       }
     })
   }

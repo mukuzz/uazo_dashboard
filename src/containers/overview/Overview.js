@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './Overview.module.scss';
-import { MetricCard, FactoryOutputChart, ProductionOrdersProgress, FrequentDefectsTable, KeyStatsTable } from '../../components';
+import { MetricCard, FactoryOutputChart, ProductionOrdersProgress, FrequentDefectsTable, KeyStatsTable, EfficiencyChart } from '../../components';
 
 class Overview extends Component {
   render() {
@@ -41,6 +41,7 @@ class Overview extends Component {
         </div>
         <div className={styles['detail-cards-cont']}>
           <ProductionOrdersProgress />
+          <EfficiencyChart />
           <FrequentDefectsTable />
         </div>
         <KeyStatsTable />
