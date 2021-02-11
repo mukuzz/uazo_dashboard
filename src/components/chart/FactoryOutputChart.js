@@ -3,9 +3,6 @@ import Chart from "chart.js";
 import { Card } from '..';
 import styles from "./FactoryOutputChart.module.scss";
 
-Chart.defaults.global.legend.display = false;
-Chart.defaults.global.elements.line.tension = 0;
-
 const API_URL = process.env.REACT_APP_API_URL
 
 class FactoryOutputChart extends Component {
@@ -19,7 +16,7 @@ class FactoryOutputChart extends Component {
       labels: [],
       data: []
     }
-    this.fetchChartData = this.fetchChartData.bind(this)
+    this.fetchData = this.fetchData.bind(this)
     this.get1dChart = this.get1dChart.bind(this)
     this.get1wChart = this.get1wChart.bind(this)
     this.get1mChart = this.get1mChart.bind(this)
@@ -40,7 +37,7 @@ class FactoryOutputChart extends Component {
     start.setHours(0,0,0,0)
     const end = new Date()
     end.setHours(23,59,59,999)
-    this.fetchChartData(start, end)
+    this.fetchData(start, end)
   }
   
   get1wChart() {
@@ -49,7 +46,7 @@ class FactoryOutputChart extends Component {
     start.setHours(0,0,0,0)
     const end = new Date()
     end.setHours(23,59,59,999)
-    this.fetchChartData(start, end)
+    this.fetchData(start, end)
   }
 
   get1mChart() {
@@ -58,10 +55,10 @@ class FactoryOutputChart extends Component {
     start.setHours(0,0,0,0)
     const end = new Date()
     end.setHours(23,59,59,999)
-    this.fetchChartData(start, end)
+    this.fetchData(start, end)
   }
 
-  fetchChartData(start, end) {
+  fetchData(start, end) {
     const tempActiveChartRequestKey = `${start.getTime()}${end.getTime()}`
     start = start.toISOString()
     end = end.toISOString()
@@ -110,6 +107,11 @@ class FactoryOutputChart extends Component {
         ]
       },
       options: {
+        elements: {
+          line: {
+              tension: 0
+          }
+        },
         responsive: true,
         maintainAspectRatio: false,
         tooltips: {

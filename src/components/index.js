@@ -10,3 +10,4 @@ export {default as ProductionOrdersProgress} from './chart/ProductionOrdersProgr
 export {default as FrequentDefectsTable} from './table/FrequentDefectsTable'
 export {default as KeyStatsTable} from './table/KeyStatsTable'
 export {default as EfficiencyChart} from './chart/EfficiencyChart'
+export {default as QualityReportChart} from './chart/QualityReportChart'

@@ -28,39 +28,35 @@
   display: grid;
   justify-content: stretch;
   grid-template-columns: auto;
-  align-items: stretch; 
-  // grid-template-columns: 25% 25% 25% 25%;
-  // :first-child, :nth-child(2), :nth-child(3) {
-  //   grid-column: span 4;
-  // }
+  align-items: stretch;
   justify-content: stretch;
   @media (min-width: $large-size) {
     grid-template-columns: 50% 50%;
     :first-child {
       grid-column: span 2;
     }
-    :nth-child(2), :nth-child(3) {
+    :nth-child(2), :nth-child(3), :nth-child(4) {
       grid-column: span 1;
     }
   }
   @media (min-width: 1300px) {
-    grid-template-columns: 20% 20% 30% 30%;
+    grid-template-columns: 30% 20% 20% 30%;
     :first-child {
       grid-column: span 3;
     }
     :nth-child(2) {
       grid-column: span 1;
     }
-    :nth-child(3) {
+    :nth-child(3), :nth-child(4) {
       grid-column: span 2;
     }
   }
   @media (min-width: 1660px) {
-    grid-template-columns: 25% 25% 20% 30%;
+    grid-template-columns: 35% 20% 20% 25%;
     :first-child {
-      grid-column: span 2;
+      grid-column: span 1;
     }
-    :nth-child(2), :nth-child(3) {
+    :nth-child(2), :nth-child(3), :nth-child(4) {
       grid-column: span 1;
     }
   }

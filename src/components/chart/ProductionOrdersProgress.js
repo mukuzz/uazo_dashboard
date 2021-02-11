@@ -3,9 +3,6 @@ import Chart from "chart.js";
 import { Card } from '..';
 import styles from './ProductionOrdersProgress.module.scss'
 
-Chart.defaults.global.legend.display = false;
-Chart.defaults.global.elements.line.tension = 0;
-
 const API_URL = process.env.REACT_APP_API_URL
 
 class ProductionOrdersProgress extends Component {
