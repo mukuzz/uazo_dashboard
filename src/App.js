@@ -32,6 +32,12 @@ class App extends Component {
             'iconClass': 'fas fa-chart-pie'
           },
           {
+            'content': <div></div>,
+            'title': 'Detail',
+            'url': '/detail',
+            'iconClass': 'fas fa-chart-line'
+          },
+          {
             'content': <Settings />,
             'title': 'Settings',
             'url': '/settings',

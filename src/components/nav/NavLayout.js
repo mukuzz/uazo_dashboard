@@ -22,7 +22,6 @@ class NavLayout extends React.Component {
     render() {
         return (
         <Router>
-            <TopNav handleSideNavOpen={this.handleSideNavOpen}/>
             <div className={styles.block}>
                 <SideNav handleSideNavClose={this.handleSideNavClose} sideNavActive={this.state.sideNavActive}>
                     {this.props.pages.map((page) => {
@@ -30,6 +29,7 @@ class NavLayout extends React.Component {
                     })}
                 </SideNav>
                 <div className={styles.content}>
+                    <TopNav handleSideNavOpen={this.handleSideNavOpen}/>
                     <Switch>
                         {this.props.pages.map((page) => {
                             console.log(page.content)
