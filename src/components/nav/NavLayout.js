@@ -1,5 +1,5 @@
 import React from "react";
-import { TopNav, SideNav, SideNavItem } from "../../components";
+import { TopNav, SideNav, SideNavItem } from "..";
 import styles from "./NavLayout.module.scss";
 
 class NavLayout extends React.Component {

@@ -2,92 +2,87 @@ import React, { Component } from 'react';
 import Chart from "chart.js";
 import { Card } from '..';
 import styles from "./FactoryOutputChart.module.scss";
+import { EventSourceContext } from "../../context";
 
-const API_URL = process.env.REACT_APP_API_URL
+const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
 class FactoryOutputChart extends Component {
+  static contextType = EventSourceContext
   chartRef = React.createRef()
   activeChartRequestKey
-  activeButton
+  activeButton = "1w"
 
   constructor(props){
     super(props)
     this.state = {
       labels: [],
-      data: []
+      data: [],
     }
-    this.fetchData = this.fetchData.bind(this)
-    this.get1dChart = this.get1dChart.bind(this)
-    this.get1wChart = this.get1wChart.bind(this)
-    this.get1mChart = this.get1mChart.bind(this)
+    this.startTime = ''
+    this.endTime = ''
   }
   
 	componentDidMount() {
-    this.get1wChart()
     this.buildChart()
+    this.refreshChart()
+		this.eventSource = this.context
+    this.eventSource.addEventListener("newQcInput", this.refreshChart)
   }
-  
+
+  componentWillUnmount() {
+		this.eventSource.removeEventListener("newQcInput", this.refreshChart)
+	}
+
   componentDidUpdate() {
     this.buildChart()
   }
 
-  get1dChart() {
-    this.activeButton = "1d"
-    const start = new Date()
-    start.setHours(0,0,0,0)
-    const end = new Date()
-    end.setHours(23,59,59,999)
-    this.fetchData(start, end)
-  }
-  
-  get1wChart() {
-    this.activeButton = "1w"
-    const start = new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
-    start.setHours(0,0,0,0)
-    const end = new Date()
-    end.setHours(23,59,59,999)
-    this.fetchData(start, end)
+  refreshChart = () => {
+    this.getChartDateRange()
+    this.fetchData()
   }
 
-  get1mChart() {
-    this.activeButton = "1m"
-    const start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-    start.setHours(0,0,0,0)
-    const end = new Date()
-    end.setHours(23,59,59,999)
-    this.fetchData(start, end)
-  }
-
-  fetchData(start, end) {
-    const tempActiveChartRequestKey = `${start.getTime()}${end.getTime()}`
-    start = start.toISOString()
-    end = end.toISOString()
-		if (this.activeChartRequestKey !== tempActiveChartRequestKey) {
-      this.activeChartRequestKey = tempActiveChartRequestKey
-			fetch(`${API_URL}/metric/output-timeseries/?start=${start}&end=${end}`)
-      .then(res => {
-        if (res.status !== 200) return null
-        return res.json()
-      })
-      .then(
-        (data) => {
-          if (data) {
-            if (this.activeChartRequestKey === tempActiveChartRequestKey) {
-              this.setState({
-                labels: data.labels,
-                data: data.data
-              })
-            }
-          }
-        },
-        (error) => {
-          console.error(error)
-        }
-      )
+  getChartDateRange = () => {
+    let start, end
+    if (this.activeButton === "1d") {
+      start = new Date()
+    } else if (this.activeButton === "1w") {
+      start = new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
+    } else if (this.activeButton === "1m") {
+      start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
     }
+    start.setHours(0,0,0,0)
+    end = new Date()
+    end.setHours(23,59,59,999)
+    this.startTime = start
+    this.endTime = end
   }
 
-  buildChart() {
+  fetchData = () => {
+    const requestChartType = `${this.activeButton}`
+    fetch(`${API_URL}/metric/output-timeseries/?start=${this.startTime.toISOString()}&end=${this.endTime.toISOString()}`)
+    .then(res => {
+      if (res.status !== 200) return null
+      return res.json()
+    })
+    .then(
+      (data) => {
+        if (data) {
+          if (this.activeButton === requestChartType) {
+            this.setState({
+              labels: data.labels,
+              data: data.data
+            })
+          }
+        }
+      },
+      (error) => {
+        console.error(error)
+      }
+    )
+  }
+
+  buildChart = () => {
     const {labels, data} = this.state
     const ctx = this.chartRef.current.getContext("2d")
 
@@ -157,14 +152,29 @@ class FactoryOutputChart extends Component {
             <h2 className={styles.title}>Factory Output</h2>
             <div className={styles.filter}>
               <button
-              className={styles.button + (this.activeButton === '1d' ? ' '+styles['btn-dark'] : '')}
-              onClick={this.get1dChart}>1d</button>
+                className={styles.button + (this.activeButton === "1d" ? ' '+styles['btn-dark'] : '')}
+                onClick={() => {
+                    this.activeButton = "1d"
+                    this.refreshChart()
+                  }}>
+                  1d
+              </button>
               <button
-              className={styles.button + (this.activeButton === '1w' ? ' '+styles['btn-dark'] : '')}
-              onClick={this.get1wChart}>1w</button>
+                className={styles.button + (this.activeButton === "1w" ? ' '+styles['btn-dark'] : '')}
+                onClick={() => {
+                  this.activeButton = "1w"
+                  this.refreshChart()
+                }}>
+                  1w
+              </button>
               <button
-              className={styles.button + (this.activeButton === '1m' ? ' '+styles['btn-dark'] : '')}
-              onClick={this.get1mChart}>1m</button>
+                className={styles.button + (this.activeButton === "1m" ? ' '+styles['btn-dark'] : '')}
+                onClick={() => {
+                  this.activeButton = "1m"
+                  this.refreshChart()
+                }}>
+                  1m
+              </button>
             </div>
           </div>
           <div className={styles.chart}>

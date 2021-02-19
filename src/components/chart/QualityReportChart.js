@@ -2,53 +2,65 @@ import React, { Component } from 'react';
 import Chart from "chart.js";
 import { TitledCard } from '..';
 import styles from "./QualityReportChart.module.scss"
+import { EventSourceContext } from "../../context";
 
-const API_URL = process.env.REACT_APP_API_URL
+const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
 class QualityReportChart extends Component {
+  static contextType = EventSourceContext
   chartRef = React.createRef()
 
   constructor(props){
     super(props)
     this.state = {ftt: 0, defective: 0, rectified: 0, rejected: 0}
-    this.buildChart = this.buildChart.bind(this)
-    this.fetchData = this.fetchData.bind(this)
+		this.shouldRefresh = true;
   }
 
   componentDidMount() {
-    this.fetchData()
     this.buildChart()
+    this.refresh()
+		this.eventSource = this.context
+    this.eventSource.addEventListener("newQcInput", this.refresh)
   }
+
+	componentWillUnmount() {
+		this.eventSource.removeEventListener("newQcInput", this.refresh)
+	}
 
   componentDidUpdate() {
     this.buildChart()
   }
 
-  fetchData() {
-		fetch(`${API_URL}/metric/active-qc-actions/`)
-    .then(res => {
-      if (res.status !== 200) return null
-      return res.json()
-    })
-    .then(
-      (data) => {
-        console.log(data)
-        if (data) {
-          this.setState({
-            ftt: data.ftt,
-            defective: data.defective,
-            rectified: data.rectified,
-            rejected: data.rejected,
-          })
+  refresh = () => {
+    if (this.shouldRefresh) {
+      this.shouldRefresh = false
+      fetch(`${API_URL}/metric/active-qc-actions/`)
+      .then(res => {
+        if (res.status !== 200) return null
+        return res.json()
+      })
+      .then(
+        (data) => {
+          if (data) {
+            this.setState({
+              ftt: data.ftt,
+              defective: data.defective,
+              rectified: data.rectified,
+              rejected: data.rejected,
+            })
+          }
+        },
+        (error) => {
+          console.error(error)
         }
-      },
-      (error) => {
-        console.error(error)
-      }
-    )
+      )
+      .finally(() => {
+				this.shouldRefresh = true
+			})
+    }
   }
 
-  buildChart() {
+  buildChart = () => {
     const ctx = this.chartRef.current.getContext("2d")
 
     if (typeof this.chart !== "undefined") this.chart.destroy();

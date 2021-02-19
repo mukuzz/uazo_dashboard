@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { Circle } from "rc-progress";
 import { TitledCard } from '..';
 import styles from './EfficiencyChart.module.scss'
+import { EventSourceContext } from "../../context";
 
-const API_URL = process.env.REACT_APP_API_URL
-const POLL_INTERVAL = process.env.REACT_APP_POLL_INTERVAL
+const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
 class EfficiencyChart extends Component {
+  static contextType = EventSourceContext
+
   constructor(props) {
 		super(props)
 		this.state = {target: 0, actual: 0, hitRate: 0}
@@ -16,8 +18,13 @@ class EfficiencyChart extends Component {
   
   componentDidMount() {
 		this.refresh()
-		setInterval(this.refresh, POLL_INTERVAL)
+    this.eventSource = this.context
+    this.eventSource.addEventListener("newQcInput", () => this.refresh())
   }
+  
+	componentWillUnmount() {
+		this.eventSource.removeEventListener("newQcInput", this.refresh)
+	}
 
 	refresh() {
 		if (this.shouldRefresh) {

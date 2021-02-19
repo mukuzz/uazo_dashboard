@@ -1,25 +1,32 @@
 import React, { Component } from 'react';
 import { Table } from '..';
 import styles from './FrequentDefectsTable.module.scss'
+import { EventSourceContext } from "../../context";
 
-const API_URL = process.env.REACT_APP_API_URL
+const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
 class FrequentDefectsTable extends Component {
+  static contextType = EventSourceContext
   constructor(props){
     super(props)
     this.state = {
       headings: ['Defect', 'Frequency'],
       data: [],
     }
-    this.fetchData = this.fetchData.bind(this)
 		this.shouldRefresh = true;
   }
   
 	componentDidMount() {
     this.fetchData()
+		this.eventSource = this.context
+    this.eventSource.addEventListener("newQcInput", this.fetchData)
   }
 
-  fetchData() {
+  componentWillUnmount() {
+		this.eventSource.removeEventListener("newQcInput", this.fetchData)
+	}
+
+  fetchData = () => {
 		if (this.shouldRefresh) {
 			this.shouldRefresh = false
 			fetch(`${API_URL}/defect/most-frequent/`)

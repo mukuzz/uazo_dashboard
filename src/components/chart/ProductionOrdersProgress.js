@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import Chart from "chart.js";
 import { Card } from '..';
 import styles from './ProductionOrdersProgress.module.scss'
+import { EventSourceContext } from "../../context";
 
-const API_URL = process.env.REACT_APP_API_URL
+const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
 class ProductionOrdersProgress extends Component {
+  static contextType = EventSourceContext
   chartRef = React.createRef()
 
   constructor(props){
@@ -15,20 +17,25 @@ class ProductionOrdersProgress extends Component {
       target: [],
       produced: []
     }
-    this.fetchChartData = this.fetchChartData.bind(this)
 		this.shouldRefresh = true;
   }
   
 	componentDidMount() {
-    this.fetchChartData()
     this.buildChart()
+    this.fetchData()
+		this.eventSource = this.context
+    this.eventSource.addEventListener("newQcInput", this.fetchData)
+  }
+
+  componentWillUnmount() {
+    this.eventSource.removeEventListener("newQcInput", this.fetchData)
   }
   
   componentDidUpdate() {
     this.buildChart()
   }
 
-  fetchChartData() {
+  fetchData = () => {
 		if (this.shouldRefresh) {
 			this.shouldRefresh = false
 			fetch(`${API_URL}/metric/active-orders/`)

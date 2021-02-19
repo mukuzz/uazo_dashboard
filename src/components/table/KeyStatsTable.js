@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
 import { Table } from '..';
+import { EventSourceContext } from "../../context";
 
-const API_URL = process.env.REACT_APP_API_URL
-const POLL_INTERVAL = process.env.REACT_APP_POLL_INTERVAL
+const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
 class KeyStatsTable extends Component {
+  static contextType = EventSourceContext
   constructor(props) {
     super(props)
     this.state = {"headings": [
       "line", "Shift", "Target", "Production", "RTT", "Variance", "Projected", "DHU",
       "Efficiency", "Defective", "Rectified" , "Rejected" ,"Operators", "Helpers", "Style", "Buyer"
     ]}
-    this.refreshStats = this.refreshStats.bind(this)
     this.shouldRefresh = true;
   }
 
   componentDidMount() {
-    this.refreshStats()
-    setInterval(this.refreshStats, POLL_INTERVAL)
+    this.refresh()
+		this.eventSource = this.context
+    this.eventSource.addEventListener("newQcInput", this.refresh)
   }
 
-  refreshStats() {
+  componentWillUnmount() {
+		this.eventSource.removeEventListener("newQcInput", this.refresh)
+	}
+
+  refresh = () => {
     if (this.shouldRefresh) {
       this.shouldRefresh = false;
       fetch(`${API_URL}/production-session/active/`)
@@ -51,13 +56,14 @@ class KeyStatsTable extends Component {
               ]
             })
           });
-          this.shouldRefresh = true;
         },
         (error) => {
           console.error(error)
-          this.shouldRefresh = true;
         }
       )
+      .finally(() => {
+        this.shouldRefresh = true
+      })
     }
   }
 

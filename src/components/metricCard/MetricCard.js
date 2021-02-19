@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
 import { Card } from '..';
 import styles from "./MetricCard.module.scss";
+import { EventSourceContext } from "../../context";
 
-const API_URL = process.env.REACT_APP_API_URL
-const POLL_INTERVAL = process.env.REACT_APP_POLL_INTERVAL
+const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
 class MetricCard extends Component {
+	static contextType = EventSourceContext
+
 	constructor(props) {
 		super(props)
 		this.state = {"data": "-"}
-		this.refresh = this.refresh.bind(this)
 		this.shouldRefresh = true;
 	}
 
 	componentDidMount() {
 		this.refresh()
-		setInterval(this.refresh, POLL_INTERVAL)
+		this.eventSource = this.context
+    	this.eventSource.addEventListener("newQcInput", this.refresh)
 	}
 
-	refresh() {
+	componentWillUnmount() {
+		this.eventSource.removeEventListener("newQcInput", this.refresh)
+	}
+
+	refresh = () => {
 		if (this.shouldRefresh) {
 			this.shouldRefresh = false
 			fetch(`${API_URL}${this.props.uri}`)
