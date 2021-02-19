@@ -4,6 +4,10 @@
     text-align: left;
     margin-bottom: .2rem;
     vertical-align: middle;
+    a {
+        text-decoration: none;
+        display: block;
+    }
 }
 
 .text {
@@ -18,9 +22,7 @@
 }
 
 .link {
-    text-decoration: none;
     padding: 0.55rem 0.75rem;
-    display: block;
     background-color: $primary-color;
     border-color: #eaedf2;
     border-radius: .5rem;

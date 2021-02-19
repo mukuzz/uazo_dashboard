@@ -1,6 +1,7 @@
 import React from "react";
 import { TopNav, SideNav, SideNavItem } from "..";
 import styles from "./NavLayout.module.scss";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 
 class NavLayout extends React.Component {
     constructor(props) {
@@ -20,16 +21,25 @@ class NavLayout extends React.Component {
 
     render() {
         return (
-        <div>
+        <Router>
             <TopNav handleSideNavOpen={this.handleSideNavOpen}/>
             <div className={styles.block}>
                 <SideNav handleSideNavClose={this.handleSideNavClose} sideNavActive={this.state.sideNavActive}>
-                    <SideNavItem title="Overview" url="#" faIcon="fas fa-chart-pie" active={true} />
-                    <SideNavItem title="Settings" url="#" faIcon="fas fa-cog" active={false} />
+                    {this.props.pages.map((page) => {
+                        return <SideNavItem key={page.url} container={Link} title={page.title} url={page.url} faIcon={page.iconClass} />
+                    })}
                 </SideNav>
-                <div className={styles.content}>{this.props.content}</div>
+                <div className={styles.content}>
+                    <Switch>
+                        {this.props.pages.map((page) => {
+                            console.log(page.content)
+                            return <Route exact key={page.url} path={page.url}>{page.content}</Route>
+                        })}
+                        <Route path="*"><Redirect to="/" /></Route>
+                    </Switch>
+                </div>
             </div>
-        </div>
+        </Router>
         );
     }
 }

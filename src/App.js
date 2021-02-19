@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-
 import { library, dom } from "@fortawesome/fontawesome-svg-core";
 import { faCog, faChartPie, faChartLine } from "@fortawesome/free-solid-svg-icons";
 
 import { NavLayout } from "./components";
-import { Overview } from './containers';
+import { Overview, Settings } from './containers';
 import { EventSourceContext } from './context';
 
 library.add([faCog, faChartPie, faChartLine])
@@ -23,10 +22,22 @@ class App extends Component {
   }
 
   render() {
-    let content = <Overview />
     return (
       <EventSourceContext.Provider value={this.eventSource}>
-        <NavLayout content={content}/>
+        <NavLayout pages={[
+          {
+            'content': <Overview/>,
+            'title': 'Overview',
+            'url': '/',
+            'iconClass': 'fas fa-chart-pie'
+          },
+          {
+            'content': <Settings />,
+            'title': 'Settings',
+            'url': '/settings',
+            'iconClass': 'fas fa-cog'
+          },
+        ]}/>
       </EventSourceContext.Provider>
     )
   }
