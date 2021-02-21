@@ -5,7 +5,7 @@ import styles from './TitledCard.module.scss'
 class TitledCard extends Component {
   render() {
     return (
-      <Card>
+      <Card className={this.props.className}>
         <div className={styles.block}>
           <div className={styles.header}>
             <h2 className={styles.title}>{this.props.title}</h2>

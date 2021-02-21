@@ -7,11 +7,9 @@ library.add([faTimes])
 
 class SideNav extends Component {
     render() {
-        let navStyle = styles.block
-        if (!this.props.sideNavActive) navStyle += " " + styles.inactive
         return (
-            <nav id="sidebarMenu" className={navStyle}>
-                <button className={styles.button} onClick={this.props.handleSideNavClose}>
+            <nav id="sidebarMenu" className={styles.block} data-active={`${this.props.sideNavActive}`}>
+                <button className={styles.button} onClick={this.props.handleSmallScreenNavClose}>
                     <span className="fas fa-times"></span>
                 </button>
                 <ul className={styles.list}>

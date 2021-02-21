@@ -10,10 +10,10 @@ class TopNav extends Component {
     render() {
         return (
             <nav className={styles.block}>
-                <button className={styles.button} onClick={this.props.handleSideNavOpen} aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <button className={styles.button} onClick={this.props.handleSideNavToggle}>
                     <span className="fas fa-bars"></span>
                 </button>
-                <div class={styles.logo} style={{backgroundImage: `url("${Logo}")`}}></div>
+                <div className={styles.logo} style={{backgroundImage: `url("${Logo}")`}}></div>
                 <div className={styles.notification}>
                     <span className="fas fa-bell"></span>
                 </div>

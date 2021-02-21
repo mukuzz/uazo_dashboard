@@ -11,17 +11,24 @@
     overflow-y: auto;
     width: 100%;
     height: 100vh;
-    transition: max-width 0.3s;
     background-color: $primary-color;
     padding-top: 1rem;
     padding-right: 1.5rem;
     padding-left: 1.5rem;
     text-align: right;
-    
+    transition: left .1s;
+
     @media (min-width: $medium-size) {
-        position: sticky;
-        width: 100%;
-        flex: 0 0 $side-nav-width;
+        width: $side-nav-width;
+    }
+
+    &[data-active="false"]{
+        @media (min-width: $medium-size) {
+            left: -$side-nav-width;
+        }
+        @media (max-width: $medium-size - 1) {
+            display: none;
+        }
     }
 }
 
@@ -41,12 +48,6 @@
     }
 
     @media (min-width: $medium-size) {
-        display: none;
-    }
-}
-
-.inactive {
-    @media (max-width: $medium-size - 1) {
         display: none;
     }
 }

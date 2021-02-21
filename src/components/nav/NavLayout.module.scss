@@ -4,10 +4,19 @@
     @media (min-width: $medium-size) {
         display: flex;
         flex-direction: row;
-    }   
+    }
 }
 
 .content {
     width: 100%;
     overflow-x: auto;
+    transition: padding-left .1s;
+    &[data-side-nav-active="true"] {
+        @media (min-width: $medium-size) {
+            padding-left: $side-nav-width;
+        }
+        @media (max-width: $medium-size - 1) {
+            display: none;
+        }
+    }
 }

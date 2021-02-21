@@ -7,32 +7,44 @@ class NavLayout extends React.Component {
     constructor(props) {
         super(props)
         this.state = {sideNavActive: false}
-        this.handleSideNavClose = this.handleSideNavClose.bind(this)
-        this.handleSideNavOpen = this.handleSideNavOpen.bind(this)
+        this.handleSmallScreenNavClose = this.handleSmallScreenNavClose.bind(this)
+        this.handleSideNavToggle = this.handleSideNavToggle.bind(this)
     }
 
-    handleSideNavClose() {
-        this.setState({sideNavActive: false})
+    handleSmallScreenNavClose() {
+        if (window.innerWidth < 768)
+            this.setState({sideNavActive: false})
     }
 
-    handleSideNavOpen() {
-        this.setState({sideNavActive: true})
+    handleSideNavToggle() {
+        this.setState((state) => ({sideNavActive: !state.sideNavActive}))
     }
 
     render() {
         return (
         <Router>
             <div className={styles.block}>
-                <SideNav handleSideNavClose={this.handleSideNavClose} sideNavActive={this.state.sideNavActive}>
+                <SideNav
+                    handleSmallScreenNavClose={this.handleSmallScreenNavClose}
+                    sideNavActive={this.state.sideNavActive}
+                    >
                     {this.props.pages.map((page) => {
-                        return <SideNavItem key={page.url} container={Link} title={page.title} url={page.url} faIcon={page.iconClass} />
+                        return (
+                            <SideNavItem
+                                key={page.url}
+                                container={Link}
+                                title={page.title}
+                                url={page.url}
+                                faIcon={page.iconClass}
+                                handleSmallScreenNavClose={this.handleSmallScreenNavClose}
+                            />
+                        )
                     })}
                 </SideNav>
-                <div className={styles.content}>
-                    <TopNav handleSideNavOpen={this.handleSideNavOpen}/>
+                <div className={styles.content} data-side-nav-active={`${this.state.sideNavActive}`} >
+                    <TopNav handleSideNavToggle={this.handleSideNavToggle}/>
                     <Switch>
                         {this.props.pages.map((page) => {
-                            console.log(page.content)
                             return <Route exact key={page.url} path={page.url}>{page.content}</Route>
                         })}
                         <Route path="*"><Redirect to="/" /></Route>

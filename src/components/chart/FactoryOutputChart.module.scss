@@ -49,9 +49,10 @@
 }
 
 .chart {
- padding: 0.5rem;
- width: 100%;
- min-height: 190px;
- max-height: 512px;
- height: 40vh;
+  position: relative;
+  padding: 0.5rem;
+  width: 100%;
+  min-height: 190px;
+  max-height: 512px;
+  height: 40vh;
 }

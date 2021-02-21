@@ -3,7 +3,7 @@ import { library, dom } from "@fortawesome/fontawesome-svg-core";
 import { faCog, faChartPie, faChartLine } from "@fortawesome/free-solid-svg-icons";
 
 import { NavLayout } from "./components";
-import { Overview, Settings } from './containers';
+import { Overview, Settings, Detail } from './containers';
 import { EventSourceContext } from './context';
 
 library.add([faCog, faChartPie, faChartLine])
@@ -32,7 +32,7 @@ class App extends Component {
             'iconClass': 'fas fa-chart-pie'
           },
           {
-            'content': <div></div>,
+            'content': <Detail />,
             'title': 'Detail',
             'url': '/detail',
             'iconClass': 'fas fa-chart-line'

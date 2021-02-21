@@ -8,7 +8,11 @@ class SideNavItem extends Component {
         return (
             <li className={styles.block} >
                 <Container to={this.props.url}>
-                    <div href={this.props.url} className={styles.link + (this.props.url === this.props.location.pathname ? " " + styles.active : "")}>
+                    <div
+                        className={styles.content}
+                        data-active={`${this.props.url === this.props.location.pathname}`}
+                        onClick={this.props.handleSmallScreenNavClose}
+                        >
                         <span className={styles.text}>
                             <span className={styles.icon + " " + this.props.faIcon}></span>
                         </span>
