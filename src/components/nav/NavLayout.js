@@ -41,7 +41,7 @@ class NavLayout extends React.Component {
                         )
                     })}
                 </SideNav>
-                <div className={styles.content} data-side-nav-active={`${this.state.sideNavActive}`} >
+                <div className={styles.content}>
                     <TopNav handleSideNavToggle={this.handleSideNavToggle}/>
                     <Switch>
                         {this.props.pages.map((page) => {
