@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table } from '..';
 import styles from './FrequentDefectsTable.module.scss'
 import { EventSourceContext } from "../../context";
-import { makeCancelable } from '../../utils/utils';
+import { makeCancelable, authHeader } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -29,7 +29,7 @@ class FrequentDefectsTable extends Component {
 
   fetchData = () => {
     if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/defect/most-frequent/`))
+    this.netReq = makeCancelable(fetch(`${API_URL}/defect/most-frequent/`, {headers: authHeader()}))
     this.netReq.promise.then(res => {
       if (res.status !== 200) return null
       return res.json()

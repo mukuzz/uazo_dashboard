@@ -3,7 +3,7 @@ import { Circle } from "rc-progress";
 import { TitledCard } from '..';
 import styles from './EfficiencyChart.module.scss'
 import { EventSourceContext } from "../../context";
-import { makeCancelable } from "../../utils/utils";
+import { makeCancelable, authHeader } from "../../utils/utils";
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -28,7 +28,7 @@ class EfficiencyChart extends Component {
 
 	fetchData = () => {
     if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/metric/factory-efficiency/`))
+    this.netReq = makeCancelable(fetch(`${API_URL}/metric/factory-efficiency/`, {headers: authHeader()}))
     this.netReq.promise.then(res => {
       if (res.status !== 200) return null
       return res.json()

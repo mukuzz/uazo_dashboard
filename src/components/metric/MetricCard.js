@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card } from '..';
 import styles from "./MetricCard.module.scss";
 import { EventSourceContext } from "../../context";
-import { makeCancelable } from '../../utils/utils';
+import { makeCancelable, authHeader } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -27,7 +27,7 @@ class MetricCard extends Component {
 
 	fetchData = () => {
     if (this.netReq) this.netReq.cancel()
-		this.netReq = makeCancelable(fetch(`${API_URL}${this.props.uri}`))
+		this.netReq = makeCancelable(fetch(`${API_URL}${this.props.uri}`, {headers: authHeader()}))
 		this.netReq.promise.then(res => {
 			if (res.status !== 200) return null
 			return res.json()

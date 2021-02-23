@@ -3,7 +3,7 @@ import Chart from "chart.js";
 import { Card } from '..';
 import styles from "./FactoryOutputChart.module.scss";
 import { EventSourceContext } from "../../context";
-import { makeCancelable } from '../../utils/utils';
+import { makeCancelable, authHeader } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -63,7 +63,7 @@ class FactoryOutputChart extends Component {
   fetchData = () => {
     const requestChartType = `${this.activeButton}`
     if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/metric/output-timeseries/?start=${this.startTime.toISOString()}&end=${this.endTime.toISOString()}`))
+    this.netReq = makeCancelable(fetch(`${API_URL}/metric/output-timeseries/?start=${this.startTime.toISOString()}&end=${this.endTime.toISOString()}`, {headers: authHeader()}))
     this.netReq.promise.then(res => {
       if (res.status !== 200) return null
       return res.json()

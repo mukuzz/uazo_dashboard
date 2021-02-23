@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table } from '..';
 import { EventSourceContext } from "../../context";
-import { makeCancelable } from '../../utils/utils';
+import { makeCancelable, authHeader } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -29,17 +29,19 @@ class KeyStatsTable extends Component {
 
   refresh = () => {
     if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/production-session/active/`))
+    this.netReq = makeCancelable(fetch(`${API_URL}/production-session/active/`, {headers: authHeader()}))
     this.netReq.promise.then(res => {
       if (res.status !== 200) return []
       return res.json()
     })
     .then(
       async (data) => {
-        await data.forEach(async prod_sess => {
+        const netReq = this.netReq
+        await data.every(async prod_sess => {
           let prod_stats
           try {
-            const res = await fetch(`${API_URL}/production-session/${prod_sess.id}/stats/`)
+            if (netReq.hasCanceled_) return false // Stop loop
+            const res = await fetch(`${API_URL}/production-session/${prod_sess.id}/stats/`, {headers: authHeader()})
             prod_stats = await res.json()
           } catch (error) {
             console.error(error)
@@ -47,13 +49,22 @@ class KeyStatsTable extends Component {
           }
           this.setState({
             [prod_sess.id]: [
-              this.fmt(prod_sess.line_number), this.fmt(prod_stats.shift),
-              this.fmt(prod_sess.target), this.fmt(prod_stats.output),
-              this.fmt(prod_stats.rtt), this.fmt(prod_stats.rtt - prod_stats.output),
-              this.fmt(prod_stats.projected_output), this.fmt(this.fmtFloat(prod_stats.dhu)),
-              this.fmt(this.fmtFloat(prod_stats.line_efficiency)), this.fmt(prod_stats.defective),
-              this.fmt(prod_stats.rectified), this.fmt(prod_stats.rejected), this.fmt(prod_sess.operators),
-              this.fmt(prod_sess.helpers), this.fmt(prod_stats.style_number), this.fmt(prod_stats.buyer)
+              this.fmt(prod_sess.line_number),
+              this.fmt(prod_stats.shift),
+              this.fmt(prod_sess.target),
+              this.fmt(prod_stats.output),
+              this.fmt(prod_stats.rtt),
+              this.fmt(prod_stats.rtt - prod_stats.output),
+              this.fmt(prod_stats.projected_output),
+              this.fmt(this.fmtFloat(prod_stats.dhu)),
+              this.fmt(this.fmtFloat(prod_stats.line_efficiency)),
+              this.fmt(prod_stats.defective),
+              this.fmt(prod_stats.rectified),
+              this.fmt(prod_stats.rejected),
+              this.fmt(prod_sess.operators),
+              this.fmt(prod_sess.helpers),
+              this.fmt(prod_stats.style_number),
+              this.fmt(prod_stats.buyer)
             ]
           })
         });

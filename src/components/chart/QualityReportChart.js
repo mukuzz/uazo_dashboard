@@ -3,7 +3,7 @@ import Chart from "chart.js";
 import { TitledCard } from '..';
 import styles from "./QualityReportChart.module.scss"
 import { EventSourceContext } from "../../context";
-import { makeCancelable } from '../../utils/utils';
+import { makeCancelable, authHeader } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -34,7 +34,7 @@ class QualityReportChart extends Component {
 
   fetchData = () => {
     if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/metric/active-qc-actions/`))
+    this.netReq = makeCancelable(fetch(`${API_URL}/metric/active-qc-actions/`, {headers: authHeader()}))
     this.netReq.promise.then(res => {
       if (res.status !== 200) return null
       return res.json()
