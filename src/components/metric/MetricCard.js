@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card } from '..';
 import styles from "./MetricCard.module.scss";
 import { EventSourceContext } from "../../context";
+import { makeCancelable } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -11,43 +12,38 @@ class MetricCard extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {"data": "-"}
-		this.shouldRefresh = true;
 	}
 
 	componentDidMount() {
-		this.refresh()
+		this.fetchData()
 		this.eventSource = this.context
-    	this.eventSource.addEventListener("newQcInput", this.refresh)
+    	this.eventSource.addEventListener("newQcInput", this.fetchData)
 	}
 
 	componentWillUnmount() {
-		this.eventSource.removeEventListener("newQcInput", this.refresh)
+		this.eventSource.removeEventListener("newQcInput", this.fetchData)
+    if (this.netReq) this.netReq.cancel()
 	}
 
-	refresh = () => {
-		if (this.shouldRefresh) {
-			this.shouldRefresh = false
-			fetch(`${API_URL}${this.props.uri}`)
-      .then(res => {
-        if (res.status !== 200) return null
-        return res.json()
-      })
-      .then(
-        (data) => {
-          if (data) {
-            this.setState({
-              "data": this.props.extractData(data.data)
-            })
-          }
-        },
-        (error) => {
-          console.error(error)
-        }
-      )
-			.finally(() => {
-				this.shouldRefresh = true
-			})
-		}
+	fetchData = () => {
+    if (this.netReq) this.netReq.cancel()
+		this.netReq = makeCancelable(fetch(`${API_URL}${this.props.uri}`))
+		this.netReq.promise.then(res => {
+			if (res.status !== 200) return null
+			return res.json()
+		})
+		.then(
+			(data) => {
+				if (data) {
+					this.setState({
+						"data": this.props.extractData(data.data)
+					})
+				}
+			},
+			(error) => {
+				console.error(error)
+			}
+		)
 	}
 
 	render() {

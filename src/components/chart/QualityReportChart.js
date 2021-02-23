@@ -3,6 +3,7 @@ import Chart from "chart.js";
 import { TitledCard } from '..';
 import styles from "./QualityReportChart.module.scss"
 import { EventSourceContext } from "../../context";
+import { makeCancelable } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -13,51 +14,46 @@ class QualityReportChart extends Component {
   constructor(props){
     super(props)
     this.state = {ftt: 0, defective: 0, rectified: 0, rejected: 0}
-		this.shouldRefresh = true;
   }
 
   componentDidMount() {
     this.buildChart()
-    this.refresh()
+    this.fetchData()
 		this.eventSource = this.context
-    this.eventSource.addEventListener("newQcInput", this.refresh)
+    this.eventSource.addEventListener("newQcInput", this.fetchData)
   }
 
 	componentWillUnmount() {
-		this.eventSource.removeEventListener("newQcInput", this.refresh)
+		this.eventSource.removeEventListener("newQcInput", this.fetchData)
+    if (this.netReq) this.netReq.cancel()
 	}
 
   componentDidUpdate() {
     this.buildChart()
   }
 
-  refresh = () => {
-    if (this.shouldRefresh) {
-      this.shouldRefresh = false
-      fetch(`${API_URL}/metric/active-qc-actions/`)
-      .then(res => {
-        if (res.status !== 200) return null
-        return res.json()
-      })
-      .then(
-        (data) => {
-          if (data) {
-            this.setState({
-              ftt: data.ftt,
-              defective: data.defective,
-              rectified: data.rectified,
-              rejected: data.rejected,
-            })
-          }
-        },
-        (error) => {
-          console.error(error)
+  fetchData = () => {
+    if (this.netReq) this.netReq.cancel()
+    this.netReq = makeCancelable(fetch(`${API_URL}/metric/active-qc-actions/`))
+    this.netReq.promise.then(res => {
+      if (res.status !== 200) return null
+      return res.json()
+    })
+    .then(
+      (data) => {
+        if (data) {
+          this.setState({
+            ftt: data.ftt,
+            defective: data.defective,
+            rectified: data.rectified,
+            rejected: data.rejected,
+          })
         }
-      )
-      .finally(() => {
-				this.shouldRefresh = true
-			})
-    }
+      },
+      (error) => {
+        console.error(error)
+      }
+    )
   }
 
   buildChart = () => {

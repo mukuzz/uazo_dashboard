@@ -3,6 +3,7 @@ import { Circle } from "rc-progress";
 import { TitledCard } from '..';
 import styles from './EfficiencyChart.module.scss'
 import { EventSourceContext } from "../../context";
+import { makeCancelable } from "../../utils/utils";
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -12,54 +13,48 @@ class EfficiencyChart extends Component {
   constructor(props) {
 		super(props)
 		this.state = {target: 0, actual: 0, hitRate: 0}
-		this.refresh = this.refresh.bind(this)
-		this.shouldRefresh = true;
   }
   
   componentDidMount() {
-		this.refresh()
+		this.fetchData()
     this.eventSource = this.context
-    this.eventSource.addEventListener("newQcInput", () => this.refresh())
+    this.eventSource.addEventListener("newQcInput", () => this.fetchData())
   }
   
 	componentWillUnmount() {
-		this.eventSource.removeEventListener("newQcInput", this.refresh)
+		this.eventSource.removeEventListener("newQcInput", this.fetchData)
+    if (this.netReq) this.netReq.cancel()
 	}
 
-	refresh() {
-		if (this.shouldRefresh) {
-			this.shouldRefresh = false
-			fetch(`${API_URL}/metric/factory-efficiency/`)
-      .then(res => {
-        if (res.status !== 200) return null
-        return res.json()
-      })
-      .then(
-        (data) => {
-          if (data) {
-            let hitRate = 0
-            if (data.target === 0 || data.actual === 0)
-              hitRate = 0
-            else {           
-              const per = data.actual / data.target * 100
-              if (isNaN(per)) hitRate = 0
-              else hitRate = per
-            }
-            this.setState({
-              actual: data.actual,
-              target: data.target,
-              hitRate: hitRate,
-            })
+	fetchData = () => {
+    if (this.netReq) this.netReq.cancel()
+    this.netReq = makeCancelable(fetch(`${API_URL}/metric/factory-efficiency/`))
+    this.netReq.promise.then(res => {
+      if (res.status !== 200) return null
+      return res.json()
+    })
+    .then(
+      (data) => {
+        if (data) {
+          let hitRate = 0
+          if (data.target === 0 || data.actual === 0)
+            hitRate = 0
+          else {           
+            const per = data.actual / data.target * 100
+            if (isNaN(per)) hitRate = 0
+            else hitRate = per
           }
-        },
-        (error) => {
-          console.error(error)
+          this.setState({
+            actual: data.actual,
+            target: data.target,
+            hitRate: hitRate,
+          })
         }
-      )
-			.finally(() => {
-				this.shouldRefresh = true
-			})
-		}
+      },
+      (error) => {
+        console.error(error)
+      }
+    )
 	}
 
 

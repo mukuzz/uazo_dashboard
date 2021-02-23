@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Table } from '..';
 import styles from './FrequentDefectsTable.module.scss'
 import { EventSourceContext } from "../../context";
+import { makeCancelable } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -13,7 +14,6 @@ class FrequentDefectsTable extends Component {
       headings: ['Defect', 'Frequency'],
       data: [],
     }
-		this.shouldRefresh = true;
   }
   
 	componentDidMount() {
@@ -24,37 +24,33 @@ class FrequentDefectsTable extends Component {
 
   componentWillUnmount() {
 		this.eventSource.removeEventListener("newQcInput", this.fetchData)
+    if (this.netReq) this.netReq.cancel()
 	}
 
   fetchData = () => {
-		if (this.shouldRefresh) {
-			this.shouldRefresh = false
-			fetch(`${API_URL}/defect/most-frequent/`)
-      .then(res => {
-        if (res.status !== 200) return null
-        return res.json()
-      })
-      .then(
-        (data) => {
-          if (data) {
-            const tableData = []
-            data.data.forEach(def => {
-              const def_name = <div className={styles['def-name']}><h3>{def.operation}</h3><p>{def.defect}</p></div>
-              tableData.push([def_name, def.count])
-            });
-            this.setState({
-              data: tableData,
-            })
-          }
-        },
-        (error) => {
-          console.error(error)
+    if (this.netReq) this.netReq.cancel()
+    this.netReq = makeCancelable(fetch(`${API_URL}/defect/most-frequent/`))
+    this.netReq.promise.then(res => {
+      if (res.status !== 200) return null
+      return res.json()
+    })
+    .then(
+      (data) => {
+        if (data) {
+          const tableData = []
+          data.data.forEach(def => {
+            const def_name = <div className={styles['def-name']}><h3>{def.operation}</h3><p>{def.defect}</p></div>
+            tableData.push([def_name, def.count])
+          });
+          this.setState({
+            data: tableData,
+          })
         }
-      )
-      .finally(() => {
-        this.shouldRefresh = true
-      })
-    }
+      },
+      (error) => {
+        console.error(error)
+      }
+    )
   }
 
   render() {

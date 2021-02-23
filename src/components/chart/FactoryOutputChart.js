@@ -3,6 +3,7 @@ import Chart from "chart.js";
 import { Card } from '..';
 import styles from "./FactoryOutputChart.module.scss";
 import { EventSourceContext } from "../../context";
+import { makeCancelable } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -31,6 +32,7 @@ class FactoryOutputChart extends Component {
 
   componentWillUnmount() {
 		this.eventSource.removeEventListener("newQcInput", this.refreshChart)
+    if (this.netReq) this.netReq.cancel()
 	}
 
   componentDidUpdate() {
@@ -60,8 +62,9 @@ class FactoryOutputChart extends Component {
 
   fetchData = () => {
     const requestChartType = `${this.activeButton}`
-    fetch(`${API_URL}/metric/output-timeseries/?start=${this.startTime.toISOString()}&end=${this.endTime.toISOString()}`)
-    .then(res => {
+    if (this.netReq) this.netReq.cancel()
+    this.netReq = makeCancelable(fetch(`${API_URL}/metric/output-timeseries/?start=${this.startTime.toISOString()}&end=${this.endTime.toISOString()}`))
+    this.netReq.promise.then(res => {
       if (res.status !== 200) return null
       return res.json()
     })

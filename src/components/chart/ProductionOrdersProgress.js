@@ -3,6 +3,7 @@ import Chart from "chart.js";
 import { Card } from '..';
 import styles from './ProductionOrdersProgress.module.scss'
 import { EventSourceContext } from "../../context";
+import { makeCancelable } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -17,7 +18,6 @@ class ProductionOrdersProgress extends Component {
       target: [],
       produced: []
     }
-		this.shouldRefresh = true;
   }
   
 	componentDidMount() {
@@ -29,6 +29,7 @@ class ProductionOrdersProgress extends Component {
 
   componentWillUnmount() {
     this.eventSource.removeEventListener("newQcInput", this.fetchData)
+    if (this.netReq) this.netReq.cancel()
   }
   
   componentDidUpdate() {
@@ -36,39 +37,34 @@ class ProductionOrdersProgress extends Component {
   }
 
   fetchData = () => {
-		if (this.shouldRefresh) {
-			this.shouldRefresh = false
-			fetch(`${API_URL}/metric/active-orders/`)
-      .then(res => {
-        if (res.status !== 200) return null
-        return res.json()
-      })
-      .then(
-        (data) => {
-          if (data) {
-            const labels = []
-            const target = []
-            const produced = []
-            data.data.forEach(po => {
-              labels.push(po.buyer)
-              target.push(po.target)
-              produced.push(po.produced)
-            });
-            this.setState({
-              labels: labels,
-              target: target,
-              produced: produced
-            })
-          }
-        },
-        (error) => {
-          console.error(error)
+    if (this.netReq) this.netReq.cancel()
+    this.netReq = makeCancelable(fetch(`${API_URL}/metric/active-orders/`))
+    this.netReq.promise.then(res => {
+      if (res.status !== 200) return null
+      return res.json()
+    })
+    .then(
+      (data) => {
+        if (data) {
+          const labels = []
+          const target = []
+          const produced = []
+          data.data.forEach(po => {
+            labels.push(po.buyer)
+            target.push(po.target)
+            produced.push(po.produced)
+          });
+          this.setState({
+            labels: labels,
+            target: target,
+            produced: produced
+          })
         }
-      )
-      .finally(() => {
-        this.shouldRefresh = true
-      })
-    }
+      },
+      (error) => {
+        console.error(error)
+      }
+    )
   }
 
   buildChart() {
