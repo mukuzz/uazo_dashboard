@@ -63,7 +63,7 @@ class Login extends Component {
                 Cookies.set('token', data.token, {sameSite: true})}
                 const {setLoggedInUser} = this.context
                 // TODO
-                setLoggedInUser({'name':'Mukul'})
+                setLoggedInUser({})
                 this.props.history.push('/')
             })
           )

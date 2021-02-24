@@ -53,7 +53,7 @@ export const PrivateRoute = ({ children, ...rest }) => {
 export const getUser = () => {
   // TODO
   if (Cookies.get('token'))
-    return {'name': 'Mukul'}
+    return {}
   else
    return null
 }

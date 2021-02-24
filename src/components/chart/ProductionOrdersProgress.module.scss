@@ -1,6 +1,10 @@
 .block {
   width: 100%;
-  // max-width: 600px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
 }
 
 .header {
@@ -19,10 +23,9 @@
 }
 
 .chart {
+  flex: 1 1 100%;
   position: relative;
   padding: 0.5rem;
-  width: 100%;
   min-height: 190px;
   max-height: 512px;
-  height: 40vmin;
  }
