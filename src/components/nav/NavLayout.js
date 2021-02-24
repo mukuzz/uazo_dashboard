@@ -1,7 +1,9 @@
 import React from "react";
 import { TopNav, SideNav, SideNavItem } from "..";
 import styles from "./NavLayout.module.scss";
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { Switch, Route, Link, Redirect } from "react-router-dom";
+import { PrivateRoute } from "../../utils/utils";
+
 
 class NavLayout extends React.Component {
     constructor(props) {
@@ -22,7 +24,6 @@ class NavLayout extends React.Component {
 
     render() {
         return (
-        <Router>
             <div className={styles.block}>
                 <SideNav
                     handleSmallScreenNavClose={this.handleSmallScreenNavClose}
@@ -45,13 +46,12 @@ class NavLayout extends React.Component {
                     <TopNav handleSideNavToggle={this.handleSideNavToggle}/>
                     <Switch>
                         {this.props.pages.map((page) => {
-                            return <Route exact key={page.url} path={page.url}>{page.content}</Route>
+                            return <PrivateRoute exact key={page.url} path={page.url}>{page.content}</PrivateRoute>
                         })}
                         <Route path="*"><Redirect to="/" /></Route>
                     </Switch>
                 </div>
             </div>
-        </Router>
         );
     }
 }

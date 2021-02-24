@@ -40,6 +40,7 @@ class KeyStatsTable extends Component {
         await data.every(async prod_sess => {
           let prod_stats
           try {
+            // TODO: Is accessing hasCanceled_ OK
             if (netReq.hasCanceled_) return false // Stop loop
             const res = await fetch(`${API_URL}/production-session/${prod_sess.id}/stats/`, {headers: authHeader()})
             prod_stats = await res.json()

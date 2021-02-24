@@ -1,5 +1,8 @@
 import React from "react";
 
-const EventSourceContext = React.createContext()
+export const EventSourceContext = React.createContext()
 
-export {EventSourceContext}
+export const LoggedInUserContext = React.createContext({
+  user: null,
+  setLoggedInUser: null
+})

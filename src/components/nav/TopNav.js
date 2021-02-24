@@ -3,6 +3,7 @@ import styles from "./TopNav.module.scss"
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBars, faUserAlt, faBell } from "@fortawesome/free-solid-svg-icons";
 import Logo from "../../assets/logo.svg"
+import { ProfileSmall } from '..';
 
 library.add([faBars, faUserAlt, faBell])
 
@@ -17,9 +18,7 @@ class TopNav extends Component {
                 <div className={styles.notification}>
                     <span className="fas fa-bell"></span>
                 </div>
-                <div className={styles.profile}>
-                    <span className="fas fa-user-alt"></span>
-                </div>
+                <ProfileSmall />
             </nav>
         );
     }
