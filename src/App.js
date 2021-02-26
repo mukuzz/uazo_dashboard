@@ -19,9 +19,9 @@ class App extends Component {
     this.eventSource = new EventSource(`${APP_URL}/sse/event/`)
 
     this.setLoggedInUser = (user) => {
-      this.setState(state => ({
+      this.setState({
         user: user,
-      }))
+      })
     }
 
     this.state = {
@@ -49,12 +49,12 @@ class App extends Component {
                     'url': '/',
                     'iconClass': 'fas fa-chart-pie'
                   },
-                  {
-                    'content': <Detail />,
-                    'title': 'Detail',
-                    'url': '/detail',
-                    'iconClass': 'fas fa-chart-line'
-                  },
+                  // {
+                  //   'content': <Detail />,
+                  //   'title': 'Detail',
+                  //   'url': '/detail',
+                  //   'iconClass': 'fas fa-chart-line'
+                  // },
                   {
                     'content': <Settings />,
                     'title': 'Settings',

@@ -79,10 +79,10 @@ class QualityReportChart extends Component {
 					],
 				}],
 				labels: [
-					'FTT',
+					'Pass',
 					'Defective',
 					'Rectified',
-					'Rejected'
+					'Alter'
 				]
 			},
 			options: {

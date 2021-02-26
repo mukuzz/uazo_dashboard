@@ -10,9 +10,9 @@ class KeyStatsTable extends Component {
   constructor(props) {
     super(props)
     this.state = {"headings": [
-      "line", "Shift", "Target", "Production", "RTT", "Variance", "Projected", "DHU",
-      "Efficiency", "Defective", "Rectified" , "Rejected" ,"Operators", "Helpers", "Style", "Buyer"
-    ]}
+      "Hour", "Output", "Target", "Variance", "DHU",
+      "Efficiency", "Defective", "Rectified" , "Alter", "Style", "Buyer"
+    ], data: []}
     this.shouldRefresh = true;
   }
 
@@ -24,11 +24,11 @@ class KeyStatsTable extends Component {
 
   componentWillUnmount() {
 		this.eventSource.removeEventListener("newQcInput", this.refresh)
-    if (this.netReq) this.netReq.cancel()
+    // if (this.netReq) this.netReq.cancel()
 	}
 
   refresh = () => {
-    if (this.netReq) this.netReq.cancel()
+    // if (this.netReq) this.netReq.cancel()
     this.netReq = makeCancelable(fetch(`${API_URL}/production-session/active/`, {headers: authHeader()}))
     this.netReq.promise.then(res => {
       if (res.status !== 200) return []
@@ -41,33 +41,33 @@ class KeyStatsTable extends Component {
           let prod_stats
           try {
             // TODO: Is accessing hasCanceled_ OK
-            if (netReq.hasCanceled_) return false // Stop loop
-            const res = await fetch(`${API_URL}/production-session/${prod_sess.id}/stats/`, {headers: authHeader()})
+            // if (netReq.hasCanceled_) return false // Stop loop
+            const res = await fetch(`${API_URL}/production-session/${prod_sess.id}/hourly-stats/`, {headers: authHeader()})
             prod_stats = await res.json()
           } catch (error) {
             console.error(error)
             return
           }
-          this.setState({
-            [prod_sess.id]: [
-              this.fmt(prod_sess.line_number),
-              this.fmt(prod_stats.shift),
-              this.fmt(prod_sess.target),
-              this.fmt(prod_stats.output),
-              this.fmt(prod_stats.rtt),
-              this.fmt(prod_stats.rtt - prod_stats.output),
-              this.fmt(prod_stats.projected_output),
-              this.fmt(this.fmtFloat(prod_stats.dhu)),
-              this.fmt(this.fmtFloat(prod_stats.line_efficiency)),
-              this.fmt(prod_stats.defective),
-              this.fmt(prod_stats.rectified),
-              this.fmt(prod_stats.rejected),
-              this.fmt(prod_sess.operators),
-              this.fmt(prod_sess.helpers),
-              this.fmt(prod_stats.style_number),
-              this.fmt(prod_stats.buyer)
+          console.log(prod_stats)
+          const data = prod_stats.map((stats) => {
+            return [
+              this.fmt(stats.hour),
+              this.fmt(stats.output),
+              this.fmt(stats.target),
+              this.fmt(stats.target - stats.output),
+              this.fmt(this.fmtFloat(stats.dhu)),
+              this.fmt(this.fmtFloat(stats.line_efficiency)),
+              this.fmt(stats.defective),
+              this.fmt(stats.rectified),
+              this.fmt(stats.rejected),
+              this.fmt(stats.style_number),
+              this.fmt(stats.buyer)
             ]
           })
+          this.setState({
+            data: data
+          })
+          return false;
         });
       },
       (error) => {
@@ -85,18 +85,18 @@ class KeyStatsTable extends Component {
   fmtFloat(num) { if (num !== undefined) return parseFloat(num).toFixed(2) }
       
   render() {
-    let tableData = []
-    for (const property in this.state) {
-      if (property === "headings") continue
-      tableData.push(this.state[property])
-    }
-    tableData = tableData.sort((a,b) => a[0] - b[0])
+    // let tableData = []
+    // for (const property in this.state) {
+    //   if (property === "headings") continue
+    //   tableData.push(this.state[property])
+    // }
+    // tableData = tableData.sort((a,b) => a[0] - b[0])
     return (
       <Table
         hideConcurrentSameSrNo={true}
         tableName="Key Statistics"
         headings={this.state.headings}
-        tableData={tableData}
+        tableData={this.state.data}
       />
     );
   }
