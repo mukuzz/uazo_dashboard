@@ -5,7 +5,7 @@ import { faCog, faChartPie, faChartLine } from "@fortawesome/free-solid-svg-icon
 import { NavLayout } from "./components";
 import { Overview, Settings, Detail, Login } from './containers';
 import { EventSourceContext, LoggedInUserContext } from './context';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { MemoryRouter as Router, Switch, Route } from "react-router-dom";
 import { getUser } from './utils/utils';
 
 library.add([faCog, faChartPie, faChartLine])
@@ -51,8 +51,8 @@ class App extends Component {
                   },
                   // {
                   //   'content': <Detail />,
-                  //   'title': 'Detail',
-                  //   'url': '/detail',
+                  //   'title': 'Sewing',
+                  //   'url': '/sewing',
                   //   'iconClass': 'fas fa-chart-line'
                   // },
                   {

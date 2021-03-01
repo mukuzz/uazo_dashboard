@@ -12,6 +12,7 @@ class FactoryOutputChart extends Component {
   chartRef = React.createRef()
   activeChartRequestKey
   activeButton = "1w"
+  timeUnit = 'day'
 
   constructor(props){
     super(props)
@@ -48,10 +49,13 @@ class FactoryOutputChart extends Component {
     let start, end
     if (this.activeButton === "1d") {
       start = new Date()
+      this.timeUnit = 'hour'
     } else if (this.activeButton === "1w") {
       start = new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
+      this.timeUnit = 'day'
     } else if (this.activeButton === "1m") {
       start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      this.timeUnit = 'day'
     }
     start.setHours(0,0,0,0)
     end = new Date()
@@ -122,24 +126,29 @@ class FactoryOutputChart extends Component {
 						type: 'time',
 						display: true,
 						scaleLabel: {
-							display: true,
-							labelString: 'Date'
+							display: false,
+							// labelString: 'Date'
             },
             time: {
               tooltipFormat: 'll HH:mm',
+              unit: this.timeUnit
             },
 						ticks: {
 							major: {
 								fontStyle: 'bold',
 								fontColor: '#FF0000'
-							}
-						}
+							},
+						},
+            distribution: 'linear'
 					}],
 					yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            },
 						display: true,
 						scaleLabel: {
-							display: true,
-							labelString: 'Output'
+							display: false,
+							// labelString: 'Output'
 						}
 					}]
 				}

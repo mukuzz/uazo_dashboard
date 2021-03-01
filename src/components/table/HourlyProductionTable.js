@@ -5,7 +5,7 @@ import { makeCancelable, authHeader } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
-class KeyStatsTable extends Component {
+class HourlyProductionTable extends Component {
   static contextType = EventSourceContext
   constructor(props) {
     super(props)
@@ -26,7 +26,7 @@ class KeyStatsTable extends Component {
 
   refresh = () => {
     if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/metric/key-stats/`, {headers: authHeader()}))
+    this.netReq = makeCancelable(fetch(`${API_URL}/metric/hourly-production/`, {headers: authHeader()}))
     this.netReq.promise.then(res => {
       if (res.status !== 200) return []
       return res.json()
@@ -35,11 +35,8 @@ class KeyStatsTable extends Component {
       (data) => {
         if (data) {
           if (data.headings && data.tableData) {
-            const headings = data.headings.map((heading) => {
-              return heading.replaceAll("_", " ").toUpperCase()
-            })
             this.setState({
-              headings: headings,
+              headings: data.headings,
               tableData: data.tableData
             })
           }
@@ -54,8 +51,8 @@ class KeyStatsTable extends Component {
   render() {
     return (
       <Table
-        hideConcurrentSameSrNo={true}
-        tableName="Key Statistics"
+        hideConcurrentSameSrNo={false}
+        tableName="Hourly Production"
         headings={this.state.headings}
         tableData={this.state.tableData}
       />
@@ -63,12 +60,4 @@ class KeyStatsTable extends Component {
   }
 }
 
-export default KeyStatsTable;
-
-// fmt(str) {
-//   if (str === 0) str = "0"
-//   str = str || '-'
-//   return str.toLocaleString()
-// }
-
-// fmtFloat(num) { if (num !== undefined) return parseFloat(num).toFixed(2) }
+export default HourlyProductionTable;

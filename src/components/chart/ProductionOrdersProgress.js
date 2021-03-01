@@ -38,7 +38,7 @@ class ProductionOrdersProgress extends Component {
 
   fetchData = () => {
     if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/metric/active-orders/`, {headers: authHeader()}))
+    this.netReq = makeCancelable(fetch(`${API_URL}/metric/active-orders-status/`, {headers: authHeader()}))
     this.netReq.promise.then(res => {
       if (res.status !== 200) return null
       return res.json()
@@ -90,6 +90,13 @@ class ProductionOrdersProgress extends Component {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        scales: {
+					yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            },
+					}]
+        }
       }
     })
   }

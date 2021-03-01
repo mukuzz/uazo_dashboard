@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from "./Detail.module.scss"
-import { Filter, MetricStrip, QualityReport } from "../../components";
+import { Filter, MetricStrip, QualityReport, HourlyStatsTable } from "../../components";
 
 class Detail extends Component {
 	render() {
@@ -26,6 +26,7 @@ class Detail extends Component {
 						{"title": "Predicted Trend", "body": "2190"},
 					]} />
 					<QualityReport />
+					<HourlyStatsTable />
 			</div>
 		);
 	}

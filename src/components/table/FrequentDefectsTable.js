@@ -40,7 +40,7 @@ class FrequentDefectsTable extends Component {
           const tableData = []
           data.data.forEach(def => {
             const def_name = <div className={styles['def-name']}><h3>{def.operation}</h3><p>{def.defect}</p></div>
-            tableData.push([def_name, def.count])
+            tableData.push([def_name, def.freq])
           });
           this.setState({
             data: tableData,
