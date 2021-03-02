@@ -2,12 +2,15 @@
   display: flex;
 	flex-direction: row;
 	width: 100%;
-  justify-content: flex-start;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
 .card {
   padding: .5rem;
+  label {
+    padding-left: 8px;
+  }
 }
 
 .input {

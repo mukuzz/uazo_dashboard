@@ -48,16 +48,26 @@ class QualityReport extends Component {
     if (this.netReq) this.netReq.cancel()
 	}
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.filterDateTime !== this.props.filterDateTime) {
+      this.fetchData()
+    }
+  }
+
   fetchData = () => {
+    let filterDateTime = this.props.filterDateTime
+    if (!filterDateTime) filterDateTime = new Date()
     if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/metric/active-qc-actions/`, {headers: authHeader()}))
+    this.netReq = makeCancelable(
+      fetch(`${API_URL}/metric/active-qc-actions/?filterDateTime=${filterDateTime.toISOString()}`,
+      {headers: authHeader()})
+    )
     this.netReq.promise.then(res => {
       if (res.status !== 200) return null
       return res.json()
     })
     .then(
       (data) => {
-        console.log(data)
         if (data) {
           this.setState({
             ftt: data.ftt,

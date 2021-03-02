@@ -7,15 +7,23 @@ class Filter extends Component {
 		return (
 			<div className={styles.block}>
 				<Card className={styles.card}>
-					<select className={styles.input}>
+					{/* <select className={styles.input}>
 						<option value="#">Choose Line</option>
 					</select>
 					<select className={styles.input}>
 						<option value="#">Choose Style</option>
-					</select>
-					<input className={styles.input} type="date" id="startDate" name="startDate" />
-					<span>To</span>
-					<input className={styles.input} type="date" id="endDate" name="endDate" />
+					</select> */}
+					{/* <input className={styles.input} type="date" id="startDate" name="startDate" />
+					<span>To</span> */}
+					<label>Filter By Date</label>
+					<input
+						className={styles.input}
+						type="date"
+						id="filterDate"
+						name="filterDate"
+						onChange={this.props.handleFilterDateChange}
+						value={this.props.filterDate}
+					/>
 				</Card>
 			</div>
 		);

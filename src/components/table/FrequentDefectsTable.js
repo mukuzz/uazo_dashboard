@@ -27,9 +27,20 @@ class FrequentDefectsTable extends Component {
     if (this.netReq) this.netReq.cancel()
 	}
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.filterDateTime !== this.props.filterDateTime) {
+      this.fetchData()
+    }
+  }
+
   fetchData = () => {
+    let filterDateTime = this.props.filterDateTime
+    if (!filterDateTime) filterDateTime = new Date()
     if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/defect/most-frequent/`, {headers: authHeader()}))
+    this.netReq = makeCancelable(
+      fetch(`${API_URL}/metric/frequent-defects/?filterDateTime=${filterDateTime.toISOString()}`,
+      {headers: authHeader()})
+    )
     this.netReq.promise.then(res => {
       if (res.status !== 200) return null
       return res.json()
