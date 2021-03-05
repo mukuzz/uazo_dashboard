@@ -11,6 +11,7 @@ import { faUnlockAlt, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 library.add([faUnlockAlt, faEnvelope])
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
+const COOKIE_SECURE = process.env.REACT_APP_COOKIE_SECURE
 
 class Login extends Component {
   static contextType = LoggedInUserContext
@@ -59,8 +60,8 @@ class Login extends Component {
           res.json().then(
             (data => {
               if ("token" in data) {
-                // TODO: Secure attribute doesn't allow the cookie to be set
-                Cookies.set('token', data.token, {sameSite: true})}
+                // TODO: Secure attribute doesn't allow the cookie to be set without https
+                Cookies.set('token', data.token, {expires: 365, sameSite: 'Lax', secure: COOKIE_SECURE === 'true'})}
                 const {setLoggedInUser} = this.context
                 // TODO
                 setLoggedInUser({})

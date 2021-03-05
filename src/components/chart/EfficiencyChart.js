@@ -90,7 +90,7 @@ class EfficiencyChart extends Component {
           </div>
         </div>
         
-        <div className={styles.footer}><h4>Efficiency Hit Rate: <strong>{this.state.hitRate.toFixed(2)}%</strong></h4></div>
+        <div className={styles.footer}><h4>Efficiency Realized (Pct): <strong>{this.state.hitRate.toFixed(2)}%</strong></h4></div>
       </div>
     )
     return (

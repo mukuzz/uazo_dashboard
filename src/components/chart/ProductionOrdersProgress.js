@@ -91,7 +91,7 @@ class ProductionOrdersProgress extends Component {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-					yAxes: [{
+					xAxes: [{
             ticks: {
               beginAtZero: true,
             },
