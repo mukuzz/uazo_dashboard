@@ -20,7 +20,8 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      message: ''
+      message: '',
+      processing: false,
     };
   }
 
@@ -38,6 +39,7 @@ class Login extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    this.setState({message: '', processing: true})
     if (this.netReq) this.netReq.cancel()
     this.netReq = makeCancelable(fetch(`${API_URL}/login/`, {
       method: 'POST',
@@ -54,26 +56,27 @@ class Login extends Component {
       (res) => {
         if (res.status !== 200) {
           this.setState({
-            message: "Wrong username or password"
+            message: "Wrong Username or Password"
           })
         } else {
           res.json().then(
             (data => {
               if ("token" in data) {
                 // TODO: Secure attribute doesn't allow the cookie to be set without https
-                Cookies.set('token', data.token, {expires: 365, sameSite: 'Lax', secure: COOKIE_SECURE === 'true'})}
-                const {setLoggedInUser} = this.context
-                // TODO
-                setLoggedInUser({})
+                Cookies.set('token', data.token, {expires: 365, sameSite: 'Lax', secure: COOKIE_SECURE === 'true'})
+                const {setUserLogInState} = this.context
+                setUserLogInState(true)
                 this.props.history.push('/')
+              }
             })
           )
         }
       },
       (error) => {
-        console.error(error)
+        this.setState({message: 'Some error occurred'})
       }
     )
+    .finally(() => this.setState({processing: false}));
   }
 
   render() {
@@ -89,22 +92,25 @@ class Login extends Component {
                 <label>Your Username</label>
                 <div className={styles['input-group']}>
                   <span>
-                    <svg class="fas fa-envelope"></svg>
+                    <svg className="fas fa-envelope"></svg>
                   </span>
-                  <input type="text" value={this.state.username} placeholder="Username" onChange={this.handleUserNameChange} />
+                  <input type="text" required value={this.state.username} placeholder="Username" onChange={this.handleUserNameChange} />
                 </div>
               </div>
               <div className={styles['form-group']}>
                 <label>Your Password</label>
                 <div className={styles['input-group']}>
                   <span>
-                    <svg class="fas fa-unlock-alt"></svg>
+                    <svg className="fas fa-unlock-alt"></svg>
                   </span>
-                  <input type="password" value={this.state.password} placeholder="Password" onChange={this.handlePasswordChange} />
+                  <input type="password" required value={this.state.password} placeholder="Password" onChange={this.handlePasswordChange} />
                 </div>
               </div>
               <span className={styles.message}>{this.state.message}</span>
-              <button className={styles.submit} >Login</button>
+              <button className={styles.submit} >
+                { this.state.processing ? <svg version="1.0" width="18px" height="18px" viewBox="0 0 128 128"><g><circle cx="16" cy="64" r="16" fill="#000000"/><circle cx="16" cy="64" r="16" fill="#555555" transform="rotate(45,64,64)"/><circle cx="16" cy="64" r="16" fill="#949494" transform="rotate(90,64,64)"/><circle cx="16" cy="64" r="16" fill="#cccccc" transform="rotate(135,64,64)"/><circle cx="16" cy="64" r="16" fill="#e1e1e1" transform="rotate(180,64,64)"/><circle cx="16" cy="64" r="16" fill="#e1e1e1" transform="rotate(225,64,64)"/><circle cx="16" cy="64" r="16" fill="#e1e1e1" transform="rotate(270,64,64)"/><circle cx="16" cy="64" r="16" fill="#e1e1e1" transform="rotate(315,64,64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="720ms" repeatCount="indefinite"></animateTransform></g></svg> : '' }
+                Login
+              </button>
             </form>
           </Card>
         </div>

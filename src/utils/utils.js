@@ -46,8 +46,8 @@ export const PrivateRoute = ({ children, ...rest }) => {
       {...rest}
       render={({ location }) =>
         <LoggedInUserContext.Consumer>
-          {({user}) => (
-            user ? (
+          {({loggedIn}) => (
+            loggedIn ? (
               children
             ) : (
               <Redirect
@@ -64,9 +64,9 @@ export const PrivateRoute = ({ children, ...rest }) => {
   );
 }
 
-export const getUser = () => {
+export const isUserLoggedIn = () => {
   if (Cookies.get('token'))
-    return {} // TODO
+    return true
   else
-   return null
+   return false
 }

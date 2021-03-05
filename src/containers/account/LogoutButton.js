@@ -9,8 +9,8 @@ class LogoutButton extends Component {
     return (
       <button className={styles.block} onClick={() => {
         Cookies.remove('token')
-        const {setLoggedInUser} = this.context
-        setLoggedInUser(null)
+        const {setUserLogInState} = this.context
+        setUserLogInState(false)
       }}>Logout</button>
     );
   }

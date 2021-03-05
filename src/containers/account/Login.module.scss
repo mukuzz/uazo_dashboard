@@ -113,4 +113,12 @@
   border-radius: 0.5rem;
   font-size: 1rem;
   user-select: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    margin-right: 8px;
+  }
 }

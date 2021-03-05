@@ -15,6 +15,7 @@
 }
 
 .img {
+  flex: 0 0 40px;
   width: 40px;
   height: 40px;
   border-radius: 25px;
@@ -24,8 +25,8 @@
   align-items: center;
   overflow: hidden;
   svg {
-      font-size: 1.5rem;
-      color: rgba(0, 0, 0, 0.7);
+    font-size: 1.5rem;
+    color: rgba(0, 0, 0, 0.7);
   }
   img {
     width: 100%;
@@ -35,5 +36,8 @@
 
 .name {
   margin-left: .5rem;
+  display: block;
   color: $primary-color;
+  text-align: end;
+  padding: 0;
 }

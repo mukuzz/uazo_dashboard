@@ -6,7 +6,7 @@ import { NavLayout } from "./components";
 import { Overview, Settings, Sewing, Login } from './containers';
 import { EventSourceContext, LoggedInUserContext } from './context';
 import { MemoryRouter as Router, Switch, Route } from "react-router-dom";
-import { getUser } from './utils/utils';
+import { isUserLoggedIn } from './utils/utils';
 
 library.add([faCog, faChartPie, faChartLine])
 dom.watch()
@@ -17,19 +17,20 @@ class App extends Component {
   constructor(props){
     super(props)
     this.eventSource = new EventSource(`${APP_URL}/sse/event/`)
-
-    this.setLoggedInUser = (user) => {
+  
+    this.setUserLogInState = (loggedIn) => {
       this.setState({
-        user: user,
+        loggedIn: loggedIn,
       })
     }
-
+  
+    const userLoggedIn = isUserLoggedIn()
     this.state = {
-      user: getUser(),
-      setLoggedInUser: this.setLoggedInUser,
+      loggedIn: userLoggedIn,
+      setUserLogInState: this.setUserLogInState,
     }
   }
-
+  
   componentWillUnmount() {
     this.eventSource.close()
   }
