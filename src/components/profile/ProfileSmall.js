@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import styles from "./ProfileSmall.module.scss"
 import { LoggedInUserContext } from "../../context";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 import { makeCancelable, authHeader } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
 class ProfileSmall extends Component {
+  static contextType = LoggedInUserContext
   constructor(props) {
     super(props)
     this.state = {
@@ -30,8 +32,14 @@ class ProfileSmall extends Component {
       {headers: authHeader()})
     )
     this.netReq.promise.then(res => {
-      if (res.status !== 200) return null
-      return res.json()
+      if (res.status === 200) return res.json()
+      else if (res.status === 401) {
+        Cookies.remove('token')
+        const {setUserLogInState} = this.context
+        setUserLogInState(false)
+        return null
+      }
+      else return null
     })
     .then(
       (data) => {
