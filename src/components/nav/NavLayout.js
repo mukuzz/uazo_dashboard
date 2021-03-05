@@ -9,13 +9,12 @@ class NavLayout extends React.Component {
     constructor(props) {
         super(props)
         this.state = {sideNavActive: false}
-        this.handleSmallScreenNavClose = this.handleSmallScreenNavClose.bind(this)
+        this.handleNavClose = this.handleNavClose.bind(this)
         this.handleSideNavToggle = this.handleSideNavToggle.bind(this)
     }
 
-    handleSmallScreenNavClose() {
-        if (window.innerWidth < 768)
-            this.setState({sideNavActive: false})
+    handleNavClose() {
+        this.setState({sideNavActive: false})
     }
 
     handleSideNavToggle() {
@@ -26,7 +25,7 @@ class NavLayout extends React.Component {
         return (
             <div className={styles.block}>
                 <SideNav
-                    handleSmallScreenNavClose={this.handleSmallScreenNavClose}
+                    handleNavClose={this.handleNavClose}
                     sideNavActive={this.state.sideNavActive}
                     >
                     {this.props.pages.map((page) => {
@@ -37,7 +36,7 @@ class NavLayout extends React.Component {
                                 title={page.title}
                                 url={page.url}
                                 faIcon={page.iconClass}
-                                handleSmallScreenNavClose={this.handleSmallScreenNavClose}
+                                handleNavClose={this.handleNavClose}
                             />
                         )
                     })}

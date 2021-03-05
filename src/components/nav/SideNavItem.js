@@ -11,7 +11,7 @@ class SideNavItem extends Component {
                     <div
                         className={styles.content}
                         data-active={`${this.props.url === this.props.location.pathname}`}
-                        onClick={this.props.handleSmallScreenNavClose}
+                        onClick={this.props.handleNavClose}
                         >
                         <span className={styles.text}>
                             <span className={styles.icon + " " + this.props.faIcon}></span>

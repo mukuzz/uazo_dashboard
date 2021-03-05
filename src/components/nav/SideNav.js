@@ -9,7 +9,7 @@ class SideNav extends Component {
     render() {
         return (
             <nav id="sidebarMenu" className={styles.block} data-active={`${this.props.sideNavActive}`}>
-                <button className={styles.button} onClick={this.props.handleSmallScreenNavClose}>
+                <button className={styles.button} onClick={this.props.handleNavClose}>
                     <span className="fas fa-times"></span>
                 </button>
                 <ul className={styles.list}>

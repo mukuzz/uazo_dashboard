@@ -1,12 +1,10 @@
 @import "../../scss/variables";
 
 .block {
-	float: left;
-	width: 100%;
-	padding: .5rem;
 	display: flex;
   flex-direction: column;
-  padding-bottom: 30vh;
+	width: 100%;
+	padding: .5rem;
 }
 
 .metric-strips-cont {
