@@ -3,7 +3,7 @@ import { library, dom } from "@fortawesome/fontawesome-svg-core";
 import { faCog, faChartPie, faChartLine } from "@fortawesome/free-solid-svg-icons";
 
 import { NavLayout } from "./components";
-import { Overview, Settings, Sewing, Login } from './containers';
+import { Overview, Settings, Stitching, Login } from './containers';
 import { EventSourceContext, LoggedInUserContext } from './context';
 import { MemoryRouter as Router, Switch, Route } from "react-router-dom";
 import { isUserLoggedIn } from './utils/utils';
@@ -51,9 +51,9 @@ class App extends Component {
                     'iconClass': 'fas fa-chart-pie'
                   },
                   {
-                    'content': <Sewing />,
-                    'title': 'Sewing',
-                    'url': '/sewing',
+                    'content': <Stitching />,
+                    'title': 'Stitching',
+                    'url': '/stitching',
                     'iconClass': 'fas fa-chart-line'
                   },
                   {

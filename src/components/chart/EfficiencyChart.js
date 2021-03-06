@@ -35,9 +35,11 @@ class EfficiencyChart extends Component {
 	fetchData = () => {
     let filterDateTime = this.props.filterDateTime
     if (!filterDateTime) filterDateTime = new Date()
+    let filterStyle = this.props.filterStyle
+    if (!filterStyle) filterStyle = ''
     if (this.netReq) this.netReq.cancel()
     this.netReq = makeCancelable(
-      fetch(`${API_URL}/metric/factory-efficiency/?filterDateTime=${filterDateTime.toISOString()}`,
+      fetch(`${API_URL}/metric/factory-efficiency/?filterDateTime=${filterDateTime.toISOString()}&filterStyle=${filterStyle}`,
       {headers: authHeader()}),
     )
     this.netReq.promise.then(res => {

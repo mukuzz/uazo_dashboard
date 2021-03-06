@@ -45,6 +45,7 @@ class Filter extends Component {
   }
 
 	render() {
+		console.log(this.props.filterStyle)
 		return (
 			<div className={styles.block}>
 				<Card className={styles.card}>
@@ -53,7 +54,7 @@ class Filter extends Component {
 					</select> */}
 					{/* <input className={styles.input} type="date" id="startDate" name="startDate" />
 					<span>To</span> */}
-					<label>Filter</label>
+					{/* <label>Filter</label> */}
 					<input
 						className={styles.input}
 						type="date"
@@ -62,7 +63,7 @@ class Filter extends Component {
 						onChange={this.props.handleFilterDateChange}
 						value={this.props.filterDate}
 					/>
-					{/* <select
+					<select
 						className={styles.input}
 						onChange={this.props.handleFilterStyleChange}
 						value={this.props.filterStyle}
@@ -73,7 +74,7 @@ class Filter extends Component {
 						{this.state.styles.map((style) => (
 							<option key={style[0]} value={style.id}>{style[1]}</option>
 						))}
-					</select> */}
+					</select>
 				</Card>
 			</div>
 		);

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import styles from "./Sewing.module.scss"
+import styles from "./Stitching.module.scss"
 import { Filter, QualityReport, HourlyStatsTable, FrequentDefectsTable, EfficiencyChart, KeyStatsTable, HourlyProductionTable, ProgressCharts } from "../../components";
 import { formatDate } from '../../utils/utils';
 
-class Sewing extends Component {
+class Stitching extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -29,6 +29,7 @@ class Sewing extends Component {
 			<div className={styles.block}>
 					<Filter
 						filterDate={this.state.filterDateTime}
+						filterStyle={this.state.filterStyle}
 						handleFilterDateChange={this.handleFilterDateChange}
 						handleFilterStyleChange={this.handleFilterStyleChange}
 					/>
@@ -53,17 +54,17 @@ class Sewing extends Component {
 						]} />
 					</div> */}
 					<div className={styles['detail-cards-cont']}>
-						<ProgressCharts filterDateTime={filterDateTime} />
-						<EfficiencyChart title="Sewing Efficiency" filterDateTime={filterDateTime} />
-						<QualityReport filterDateTime={filterDateTime} />
-						<FrequentDefectsTable filterDateTime={filterDateTime} />
+						<ProgressCharts filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
+						<EfficiencyChart title="Efficiency" filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
+						<QualityReport filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
+						<FrequentDefectsTable filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
 					</div>
-					<HourlyProductionTable filterDateTime={filterDateTime} />
-					<HourlyStatsTable filterDateTime={filterDateTime} />
-					<KeyStatsTable filterDateTime={filterDateTime} />
+					<HourlyProductionTable filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
+					<HourlyStatsTable filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
+					<KeyStatsTable filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
 			</div>
 		);
 	}
 }
 
-export default Sewing;
+export default Stitching;
