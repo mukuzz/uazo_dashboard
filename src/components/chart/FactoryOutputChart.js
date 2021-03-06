@@ -11,7 +11,7 @@ class FactoryOutputChart extends Component {
   static contextType = EventSourceContext
   chartRef = React.createRef()
   activeChartRequestKey
-  activeButton = "1w"
+  activeButton = "1d"
   timeUnit = 'day'
 
   constructor(props){
@@ -164,7 +164,7 @@ class FactoryOutputChart extends Component {
             <h2 className={styles.title}>Factory Output</h2>
             <div className={styles.filter}>
               <button
-                className={styles.button + (this.activeButton === "1d" ? ' '+styles['btn-dark'] : '')}
+                data-active={this.activeButton === "1d"}
                 onClick={() => {
                     this.activeButton = "1d"
                     this.refreshChart()
@@ -172,7 +172,7 @@ class FactoryOutputChart extends Component {
                   1d
               </button>
               <button
-                className={styles.button + (this.activeButton === "1w" ? ' '+styles['btn-dark'] : '')}
+                data-active={this.activeButton === "1w"}
                 onClick={() => {
                   this.activeButton = "1w"
                   this.refreshChart()
@@ -180,7 +180,7 @@ class FactoryOutputChart extends Component {
                   1w
               </button>
               <button
-                className={styles.button + (this.activeButton === "1m" ? ' '+styles['btn-dark'] : '')}
+                data-active={this.activeButton === "1m"}
                 onClick={() => {
                   this.activeButton = "1m"
                   this.refreshChart()

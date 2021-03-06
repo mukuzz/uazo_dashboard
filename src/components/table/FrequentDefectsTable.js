@@ -11,7 +11,7 @@ class FrequentDefectsTable extends Component {
   constructor(props){
     super(props)
     this.state = {
-      headings: ['Defect', 'Frequency'],
+      headings: ['Defect', 'Frequency', 'Line(s) Affected'],
       data: [],
     }
   }
@@ -51,7 +51,7 @@ class FrequentDefectsTable extends Component {
           const tableData = []
           data.data.forEach(def => {
             const def_name = <div className={styles['def-name']}><h3>{def.operation}</h3><p>{def.defect}</p></div>
-            tableData.push([def_name, def.freq])
+            tableData.push([def_name, def.freq, def.affected_lines])
           });
           this.setState({
             data: tableData,

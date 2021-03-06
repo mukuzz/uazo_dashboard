@@ -1,18 +1,19 @@
-@import "../../scss/variables";
 @import "../../scss/mixins";
 
 .block {
   width: 100%;
-  background-color: $chart-background-color;
-  border: .0625rem solid rgba(46,54,80,.125);
-  border-radius: 0.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
 }
 
 .header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem;
   border-bottom: .0625rem solid rgba(46,54,80,.125);
 }
 
@@ -57,10 +58,9 @@
 }
 
 .chart {
+  flex: 1 1 100%;
   position: relative;
   padding: 0.5rem;
-  width: 100%;
   min-height: 190px;
   max-height: 512px;
-  height: 33vmax;
-}
+ }

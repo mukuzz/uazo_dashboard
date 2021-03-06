@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Chart from "chart.js";
 import { Card } from '..';
-import styles from './ProductionOrdersProgress.module.scss'
+import styles from './ProgressCharts.module.scss'
 import { EventSourceContext } from "../../context";
 import { makeCancelable, authHeader } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
-class ProductionOrdersProgress extends Component {
+class ProgressCharts extends Component {
   static contextType = EventSourceContext
   chartRef = React.createRef()
 
@@ -18,8 +18,14 @@ class ProductionOrdersProgress extends Component {
       target: [],
       produced: []
     }
+    this.chartOptions= {
+      orders: "/metric/active-orders-progress/",
+      styles: "/metric/active-styles-progress/",
+      lines: "/metric/lines-progress/",
+    }
+    this.activeChart = 'orders'
   }
-  
+
 	componentDidMount() {
     this.buildChart()
     this.fetchData()
@@ -31,14 +37,21 @@ class ProductionOrdersProgress extends Component {
     this.eventSource.removeEventListener("newQcInput", this.fetchData)
     if (this.netReq) this.netReq.cancel()
   }
-  
-  componentDidUpdate() {
-    this.buildChart()
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.filterDateTime !== this.props.filterDateTime) {
+      this.fetchData()
+    } else this.buildChart()
   }
 
   fetchData = () => {
+    let filterDateTime = this.props.filterDateTime
+    if (!filterDateTime) filterDateTime = new Date()
     if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/metric/active-orders-status/`, {headers: authHeader()}))
+    this.netReq = makeCancelable(
+      fetch(`${API_URL}${this.chartOptions[this.activeChart]}?filterDateTime=${filterDateTime.toISOString()}`,
+      {headers: authHeader()},
+    ))
     this.netReq.promise.then(res => {
       if (res.status !== 200) return null
       return res.json()
@@ -49,8 +62,9 @@ class ProductionOrdersProgress extends Component {
           const labels = []
           const target = []
           const produced = []
+          // TODO: trim label if too big
           data.data.forEach(po => {
-            labels.push(po.buyer)
+            labels.push(po.label)
             target.push(po.target)
             produced.push(po.produced)
           });
@@ -76,7 +90,7 @@ class ProductionOrdersProgress extends Component {
     this.chart = new Chart(ctx, {
       type: "horizontalBar",
       data: {
-        labels: labels.length === target.length ? labels : new Array(target.length).fill("PO"),
+        labels: labels.length === target.length ? labels : new Array(target.length).fill("-"),
         datasets: [{
             label: "Target",
             data: target,
@@ -106,7 +120,33 @@ class ProductionOrdersProgress extends Component {
       <Card>
         <div className={styles.block}>
           <div className={styles.header}>
-            <h2 className={styles.title}>Production Orders Progress</h2>
+            <h2 className={styles.title}>Progress</h2>
+            <div className={styles.filter}>
+              <button
+                data-active={this.activeChart === "orders"}
+                onClick={() => {
+                  this.activeChart = "orders"
+                  this.fetchData()
+                }}>
+                  Orders
+              </button>
+              <button
+                data-active={this.activeChart === "styles"}
+                onClick={() => {
+                  this.activeChart = "styles"
+                  this.fetchData()
+                }}>
+                  Styles
+              </button>
+              <button
+                data-active={this.activeChart === "lines"}
+                onClick={() => {
+                  this.activeChart = "lines"
+                  this.fetchData()
+                }}>
+                  Lines
+              </button>
+            </div>
           </div>
           <div className={styles.chart}>
             <canvas id="po-progress-chart" ref={this.chartRef} />
@@ -117,4 +157,4 @@ class ProductionOrdersProgress extends Component {
   }
 }
 
-export default ProductionOrdersProgress;
+export default ProgressCharts;

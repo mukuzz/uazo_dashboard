@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './Overview.module.scss';
-import { MetricCard, FactoryOutputChart, ProductionOrdersProgress, FrequentDefectsTable, KeyStatsTable, EfficiencyChart, QualityReportChart, HourlyProductionTable, HourlyStatsTable, QualityReport } from '../../components';
+import { MetricCard, FactoryOutputChart, FrequentDefectsTable, KeyStatsTable, EfficiencyChart, HourlyProductionTable, HourlyStatsTable, QualityReport, ProgressCharts } from '../../components';
 
 class Overview extends Component {
   render() {
@@ -10,17 +10,17 @@ class Overview extends Component {
         <div className={styles['metric-cards-cont']}>
           <MetricCard
             metricName="Production Orders"
-            uri="/metric/active-orders-status/"
+            uri="/metric/active-orders-progress/"
             extractData={(data) => data.length}
           />
           <MetricCard
             metricName="Production Output"
-            uri="/metric/active-orders-status/"
+            uri="/metric/active-orders-progress/"
             extractData={(data) => data.map((d) => d.produced).reduce((prev, curr) => prev + curr)}
           />
           <MetricCard
             metricName="Order Quantity"
-            uri="/metric/active-orders-status/"
+            uri="/metric/active-orders-progress/"
             extractData={(data) => data.map((d) => d.target).reduce((prev, curr) => prev + curr)}
           />
           <MetricCard
@@ -40,8 +40,8 @@ class Overview extends Component {
           />
         </div>
         <div className={styles['detail-cards-cont']}>
-          <ProductionOrdersProgress />
-          <EfficiencyChart />
+          <ProgressCharts />
+          <EfficiencyChart title="Factory Efficiency" />
           {/* <QualityReportChart /> */}
           <QualityReport />
           <FrequentDefectsTable />

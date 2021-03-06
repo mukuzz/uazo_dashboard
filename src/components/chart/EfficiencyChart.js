@@ -94,7 +94,7 @@ class EfficiencyChart extends Component {
       </div>
     )
     return (
-      <TitledCard title="Factory Efficiency" content={content} />
+      <TitledCard title={this.props.title} content={content} />
     );
   }
 }
