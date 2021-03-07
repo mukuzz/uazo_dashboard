@@ -8,7 +8,7 @@
     top: 0;
     background-color: #f5f8fb;
     background-color: rgba(245, 248, 251, 0.8);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(20px);
     z-index: 99;
     
     @media (min-width: $medium-size) {
