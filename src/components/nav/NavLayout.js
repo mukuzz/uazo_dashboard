@@ -24,6 +24,7 @@ class NavLayout extends React.Component {
     render() {
         return (
             <div className={styles.block}>
+                <TopNav handleSideNavToggle={this.handleSideNavToggle} sideNavActive={this.state.sideNavActive}/>
                 <SideNav
                     handleNavClose={this.handleNavClose}
                     sideNavActive={this.state.sideNavActive}
@@ -41,8 +42,7 @@ class NavLayout extends React.Component {
                         )
                     })}
                 </SideNav>
-                <div className={styles.content}>
-                    <TopNav handleSideNavToggle={this.handleSideNavToggle}/>
+                <div className={styles.content} data-active={`${this.state.sideNavActive}`}>
                     <Switch>
                         {this.props.pages.map((page) => {
                             return <PrivateRoute exact key={page.url} path={page.url}>{page.content}</PrivateRoute>

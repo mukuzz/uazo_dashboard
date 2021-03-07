@@ -9,5 +9,7 @@
 
 .content {
     width: 100%;
+    padding-top: $top-nav-height;
     padding-bottom: 30vh;
+    overflow: hidden;
 }

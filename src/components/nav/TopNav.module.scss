@@ -2,17 +2,29 @@
 @import "../../scss/variables.scss";
 
 .block {
-    position: sticky;
+    position: fixed;
+    width: 100%;
+    height: $top-nav-height;
     top: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.25rem;
     background-color: #f5f8fb;
     background-color: rgba(245, 248, 251, 0.8);
     backdrop-filter: blur(5px);
     z-index: 99;
+    
+    @media (min-width: $medium-size) {
+        &[data-active="true"]{
+            padding-left: $side-nav-width;
+        }
+    }
+}
+
+.content {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1.25rem;
 }
 
 .button {
