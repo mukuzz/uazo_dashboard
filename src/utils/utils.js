@@ -70,3 +70,39 @@ export const isUserLoggedIn = () => {
   else
    return false
 }
+
+export const getUrlParamsStringFromFilter = (filter) =>  {
+  if (!filter)
+    return ''
+  let paramsString = '?'
+  if (filter.filterStartDate) {
+    if (paramsString.length > 1)
+      paramsString += '&'
+    let filterStartDateTime = new Date(filter.filterStartDate)
+		filterStartDateTime.setHours(0,0,0,0)
+    paramsString += `startDateTime=${filterStartDateTime.toISOString()}`
+  }
+  if (filter.filterEndDate) {
+    if (paramsString.length > 1)
+      paramsString += '&'
+    let filterEndDateTime = new Date(filter.filterEndDate)
+		filterEndDateTime.setHours(23,59,59,999)
+    paramsString += `endDateTime=${filterEndDateTime.toISOString()}`
+  }
+  if (filter.filterLine) {
+    if (paramsString.length > 1)
+      paramsString += '&'
+    paramsString += `line=${encodeURIComponent(filter.filterLine)}`
+  }
+  if (filter.filterStyle) {
+    if (paramsString.length > 1)
+      paramsString += '&'
+    paramsString += `style=${encodeURIComponent(filter.filterStyle)}`
+  }
+  if (filter.filterOrder) {
+    if (paramsString.length > 1)
+      paramsString += '&'
+    paramsString += `order=${encodeURIComponent(filter.filterOrder)}`
+  }
+  return encodeURI(paramsString)
+}

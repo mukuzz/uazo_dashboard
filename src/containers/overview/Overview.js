@@ -10,17 +10,17 @@ class Overview extends Component {
         <div className={styles['metric-cards-cont']}>
           <MetricCard
             metricName="Production Orders"
-            uri="/metric/active-orders-progress/"
+            uri="/metric/orders-progress/"
             extractData={(data) => data.length}
           />
           <MetricCard
             metricName="Production Output"
-            uri="/metric/active-orders-progress/"
+            uri="/metric/orders-progress/"
             extractData={(data) => data.map((d) => d.produced).reduce((prev, curr) => prev + curr)}
           />
           <MetricCard
             metricName="Order Quantity"
-            uri="/metric/active-orders-progress/"
+            uri="/metric/orders-progress/"
             extractData={(data) => data.map((d) => d.target).reduce((prev, curr) => prev + curr)}
           />
           <MetricCard

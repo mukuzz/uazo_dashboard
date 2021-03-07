@@ -3,7 +3,7 @@ import { Circle } from "rc-progress";
 import { TitledCard } from '..';
 import styles from './EfficiencyChart.module.scss'
 import { EventSourceContext } from "../../context";
-import { makeCancelable, authHeader } from "../../utils/utils";
+import { makeCancelable, authHeader, getUrlParamsStringFromFilter } from "../../utils/utils";
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -22,7 +22,7 @@ class EfficiencyChart extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.filterDateTime !== this.props.filterDateTime) {
+    if (prevProps !== this.props) {
       this.fetchData()
     }
   }
@@ -33,13 +33,10 @@ class EfficiencyChart extends Component {
 	}
 
 	fetchData = () => {
-    let filterDateTime = this.props.filterDateTime
-    if (!filterDateTime) filterDateTime = new Date()
-    let filterStyle = this.props.filterStyle
-    if (!filterStyle) filterStyle = ''
+    const urlParams = getUrlParamsStringFromFilter(this.props.filter)
     if (this.netReq) this.netReq.cancel()
     this.netReq = makeCancelable(
-      fetch(`${API_URL}/metric/factory-efficiency/?filterDateTime=${filterDateTime.toISOString()}&filterStyle=${filterStyle}`,
+      fetch(`${API_URL}/metric/efficiency/${urlParams}`,
       {headers: authHeader()}),
     )
     this.netReq.promise.then(res => {

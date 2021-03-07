@@ -5,13 +5,14 @@
   justify-content: flex-start;
   flex-wrap: wrap;
   align-items: center;
+  overflow: visible;
 
   select {
     border: 1px solid #888;
     border-radius: 2px;
     color: #000;
     font-size: .875rem;
-    margin: 0 .5rem;
+    margin: .5rem .5rem;
     overflow: hidden;
     padding-top: 2px;
     padding-bottom: 2px;
@@ -21,9 +22,9 @@
 }
 
 .card {
-  padding: 1rem .75rem;
+  padding: .75rem .75rem;
 }
 
 .input {
-  margin: 0 .5rem;
+  margin: .5rem .5rem;
 }

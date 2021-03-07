@@ -3,7 +3,7 @@ import Chart from "chart.js";
 import { Card } from '..';
 import styles from './ProgressCharts.module.scss'
 import { EventSourceContext } from "../../context";
-import { makeCancelable, authHeader } from '../../utils/utils';
+import { makeCancelable, authHeader, getUrlParamsStringFromFilter } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -19,8 +19,8 @@ class ProgressCharts extends Component {
       produced: []
     }
     this.chartOptions= {
-      orders: "/metric/active-orders-progress/",
-      styles: "/metric/active-styles-progress/",
+      orders: "/metric/orders-progress/",
+      styles: "/metric/styles-progress/",
       lines: "/metric/lines-progress/",
     }
     this.activeChart = 'orders'
@@ -39,19 +39,16 @@ class ProgressCharts extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.filterDateTime !== this.props.filterDateTime) {
+    if (prevProps !== this.props) {
       this.fetchData()
     } else this.buildChart()
   }
 
   fetchData = () => {
-    let filterDateTime = this.props.filterDateTime
-    if (!filterDateTime) filterDateTime = new Date()
-    let filterStyle = this.props.filterStyle
-    if (!filterStyle) filterStyle = ''
+    const urlParams = getUrlParamsStringFromFilter(this.props.filter)
     if (this.netReq) this.netReq.cancel()
     this.netReq = makeCancelable(
-      fetch(`${API_URL}${this.chartOptions[this.activeChart]}?filterDateTime=${filterDateTime.toISOString()}&filterStyle=${filterStyle}`,
+      fetch(`${API_URL}${this.chartOptions[this.activeChart]}${urlParams}`,
       {headers: authHeader()},
     ))
     this.netReq.promise.then(res => {

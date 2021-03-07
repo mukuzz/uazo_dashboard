@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table } from '..';
 import styles from './FrequentDefectsTable.module.scss'
 import { EventSourceContext } from "../../context";
-import { makeCancelable, authHeader } from '../../utils/utils';
+import { makeCancelable, authHeader, getUrlParamsStringFromFilter } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -28,17 +28,16 @@ class FrequentDefectsTable extends Component {
 	}
 
   componentDidUpdate(prevProps) {
-    if (prevProps.filterDateTime !== this.props.filterDateTime) {
+    if (prevProps !== this.props) {
       this.fetchData()
     }
   }
 
   fetchData = () => {
-    let filterDateTime = this.props.filterDateTime
-    if (!filterDateTime) filterDateTime = new Date()
+    const urlParams = getUrlParamsStringFromFilter(this.props.filter)
     if (this.netReq) this.netReq.cancel()
     this.netReq = makeCancelable(
-      fetch(`${API_URL}/metric/frequent-defects/?filterDateTime=${filterDateTime.toISOString()}`,
+      fetch(`${API_URL}/metric/frequent-defects/${urlParams}`,
       {headers: authHeader()})
     )
     this.netReq.promise.then(res => {

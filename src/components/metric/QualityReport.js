@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { TitledCard } from '..';
 import styles from "./QualityReport.module.scss"
 import { EventSourceContext } from "../../context";
-import { makeCancelable, authHeader } from "../../utils/utils";
+import { makeCancelable, authHeader, getUrlParamsStringFromFilter } from "../../utils/utils";
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -49,17 +49,16 @@ class QualityReport extends Component {
 	}
 
   componentDidUpdate(prevProps) {
-    if (prevProps.filterDateTime !== this.props.filterDateTime) {
+    if (prevProps !== this.props) {
       this.fetchData()
     }
   }
 
   fetchData = () => {
-    let filterDateTime = this.props.filterDateTime
-    if (!filterDateTime) filterDateTime = new Date()
+    const urlParams = getUrlParamsStringFromFilter(this.props.filter)
     if (this.netReq) this.netReq.cancel()
     this.netReq = makeCancelable(
-      fetch(`${API_URL}/metric/active-qc-actions/?filterDateTime=${filterDateTime.toISOString()}`,
+      fetch(`${API_URL}/metric/qc-actions/${urlParams}`,
       {headers: authHeader()})
     )
     this.netReq.promise.then(res => {

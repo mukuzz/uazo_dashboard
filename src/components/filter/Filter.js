@@ -10,7 +10,9 @@ class Filter extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			orders: [],
 			styles: [],
+			lines: [],
 		}
 	}
 
@@ -19,13 +21,43 @@ class Filter extends Component {
   }
 
   componentWillUnmount() {
-    if (this.netReq) this.netReq.cancel()
+		if (this.ordersNetReq) this.ordersNetReq.cancel()
+		if (this.styleNetReq) this.styleNetReq.cancel()
+		if (this.lineNetReq) this.lineNetReq.cancel()
   }
 
   fetchData = () => {
-    if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/style/`, {headers: authHeader()}))
-    this.netReq.promise.then(res => {
+    this.fetchOrders()
+		this.fetchStyles()
+		this.fetchLines()
+  }
+
+	fetchOrders = () => {
+		if (this.ordersNetReq) this.ordersNetReq.cancel()
+    this.ordersNetReq = makeCancelable(fetch(`${API_URL}/production-order/`, {headers: authHeader()}))
+    this.ordersNetReq.promise.then(res => {
+      if (res.status !== 200) return null
+      return res.json()
+    })
+    .then(
+      (data) => {
+        if (data) {
+          const orders = data.map((order) => [order.id, order.order_number])
+          this.setState({
+            orders: orders,
+          })
+        }
+      },
+      (error) => {
+        console.error(error)
+      }
+    )
+	}
+
+	fetchStyles = () => {
+    if (this.styleNetReq) this.styleNetReq.cancel()
+    this.styleNetReq = makeCancelable(fetch(`${API_URL}/style/`, {headers: authHeader()}))
+    this.styleNetReq.promise.then(res => {
       if (res.status !== 200) return null
       return res.json()
     })
@@ -44,35 +76,75 @@ class Filter extends Component {
     )
   }
 
+	fetchLines = () => {
+    if (this.lineNetReq) this.lineNetReq.cancel()
+    this.lineNetReq = makeCancelable(fetch(`${API_URL}/line/`, {headers: authHeader()}))
+    this.lineNetReq.promise.then(res => {
+      if (res.status !== 200) return null
+      return res.json()
+    })
+    .then(
+      (data) => {
+        if (data) {
+          const lines = data.map((line) => [line.id, line.number])
+          this.setState({
+            lines: lines,
+          })
+        }
+      },
+      (error) => {
+        console.error(error)
+      }
+    )
+  }
+
 	render() {
-		console.log(this.props.filterStyle)
 		return (
 			<div className={styles.block}>
 				<Card className={styles.card}>
-					{/* <select className={styles.input}>
-						<option value="#">Choose Line</option>
-					</select> */}
-					{/* <input className={styles.input} type="date" id="startDate" name="startDate" />
-					<span>To</span> */}
-					{/* <label>Filter</label> */}
 					<input
 						className={styles.input}
 						type="date"
-						id="filterDate"
-						name="filterDate"
-						onChange={this.props.handleFilterDateChange}
-						value={this.props.filterDate}
+						name="filterStartDate"
+						onChange={this.props.handleFilterStartDateChange}
+						value={this.props.filterStartDate}
 					/>
+					<span>To</span>
+					<input
+						className={styles.input}
+						type="date"
+						name="filterEndDate"
+						onChange={this.props.handleFilterEndDateChange}
+						value={this.props.filterEndDate}
+					/>
+					<select
+						className={styles.input}
+						onChange={this.props.handleFilterOrderChange}
+						value={this.props.filterOrder}
+						>
+						<option value="">Choose Order</option>
+						{this.state.orders.map((order) => (
+							<option key={order[0]} value={order[0]}>{order[1]}</option>
+						))}
+					</select>
 					<select
 						className={styles.input}
 						onChange={this.props.handleFilterStyleChange}
 						value={this.props.filterStyle}
 						>
-						<option value=''>
-							Choose Style
-						</option>
+						<option value="">Choose Style</option>
 						{this.state.styles.map((style) => (
-							<option key={style[0]} value={style.id}>{style[1]}</option>
+							<option key={style[0]} value={style[0]}>{style[1]}</option>
+						))}
+					</select>
+					<select
+						className={styles.input}
+						onChange={this.props.handleFilterLineChange}
+						value={this.props.filterLine}
+						>
+						<option value="">Choose Line</option>
+						{this.state.lines.map((line) => (
+							<option key={line[0]} value={line[0]}>{line[1]}</option>
 						))}
 					</select>
 				</Card>

@@ -34,7 +34,7 @@ class QualityReportChart extends Component {
 
   fetchData = () => {
     if (this.netReq) this.netReq.cancel()
-    this.netReq = makeCancelable(fetch(`${API_URL}/metric/active-qc-actions/`, {headers: authHeader()}))
+    this.netReq = makeCancelable(fetch(`${API_URL}/metric/qc-actions/`, {headers: authHeader()}))
     this.netReq.promise.then(res => {
       if (res.status !== 200) return null
       return res.json()

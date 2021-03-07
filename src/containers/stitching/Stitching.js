@@ -7,31 +7,48 @@ class Stitching extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			filterDateTime: formatDate(new Date()),
+			filterStartDate: formatDate(new Date()),
+			filterEndDate: formatDate(new Date()),
+			filterOrder: '',
 			filterStyle: '',
+			filterLine: '',
 		}
 	}
 
-	handleFilterDateChange = (event) => {
-		this.setState({filterDateTime: event.target.value})
+	handleFilterStartDateChange = (event) => {
+		this.setState({filterStartDate: event.target.value})
+	}
+
+	handleFilterEndDateChange = (event) => {
+		this.setState({filterEndDate: event.target.value})
+	}
+
+	handleFilterOrderChange = (event) => {
+		this.setState({filterOrder: event.target.value})
 	}
 
 	handleFilterStyleChange = (event) => {
 		this.setState({filterStyle: event.target.value})
 	}
 
+	handleFilterLineChange = (event) => {
+		this.setState({filterLine: event.target.value})
+	}
+
 	render() {
-		let filterDateTime = new Date(this.state.filterDateTime)
-		filterDateTime.setHours(23,59,59,999)
-		if (this.state.filterDateTime === formatDate(new Date()))
-			filterDateTime = new Date()
 		return (
 			<div className={styles.block}>
 					<Filter
-						filterDate={this.state.filterDateTime}
+						filterStartDate={this.state.filterStartDate}
+						filterEndDate={this.state.filterEndDate}
+						filterOrder={this.state.filterOrder}
 						filterStyle={this.state.filterStyle}
-						handleFilterDateChange={this.handleFilterDateChange}
+						filterLine={this.state.filterLine}
+						handleFilterStartDateChange={this.handleFilterStartDateChange}
+						handleFilterEndDateChange={this.handleFilterEndDateChange}
+						handleFilterOrderChange={this.handleFilterOrderChange}
 						handleFilterStyleChange={this.handleFilterStyleChange}
+						handleFilterLineChange={this.handleFilterLineChange}
 					/>
 					{/* <div className={styles['metric-strips-cont']}>
 						<MetricStrip items={[
@@ -54,14 +71,14 @@ class Stitching extends Component {
 						]} />
 					</div> */}
 					<div className={styles['detail-cards-cont']}>
-						<ProgressCharts filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
-						<EfficiencyChart title="Efficiency" filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
-						<QualityReport filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
-						<FrequentDefectsTable filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
+						<ProgressCharts filter={this.state} />
+						<EfficiencyChart title="Efficiency" filter={this.state} />
+						<QualityReport filter={this.state} />
+						<FrequentDefectsTable filter={this.state} />
 					</div>
-					<HourlyProductionTable filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
-					<HourlyStatsTable filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
-					<KeyStatsTable filterDateTime={filterDateTime} filterStyle={this.state.filterStyle} />
+					<HourlyProductionTable filter={this.state} />
+					<HourlyStatsTable filter={this.state} />
+					<KeyStatsTable filter={this.state} />
 			</div>
 		);
 	}

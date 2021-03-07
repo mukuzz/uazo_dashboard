@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table } from '..';
 import { EventSourceContext } from "../../context";
-import { makeCancelable, authHeader } from '../../utils/utils';
+import { makeCancelable, authHeader, getUrlParamsStringFromFilter } from '../../utils/utils';
 
 const API_URL = process.env.REACT_APP_SERVER_URL + '/api'
 
@@ -25,17 +25,16 @@ class HourlyProductionTable extends Component {
 	}
   
   componentDidUpdate(prevProps) {
-    if (prevProps.filterDateTime !== this.props.filterDateTime) {
+    if (prevProps !== this.props) {
       this.refresh()
     }
   }
 
   refresh = () => {
-    let filterDateTime = this.props.filterDateTime
-    if (!filterDateTime) filterDateTime = new Date()
+    const urlParams = getUrlParamsStringFromFilter(this.props.filter)
     if (this.netReq) this.netReq.cancel()
     this.netReq = makeCancelable(
-      fetch(`${API_URL}/metric/hourly-production/?filterDateTime=${filterDateTime.toISOString()}`,
+      fetch(`${API_URL}/metric/hourly-production/${urlParams}`,
       {headers: authHeader()})
     )
     this.netReq.promise.then(res => {
