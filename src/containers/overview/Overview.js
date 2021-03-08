@@ -4,6 +4,18 @@ import { MetricCard, FactoryOutputChart, FrequentDefectsTable, KeyStatsTable, Ef
 
 class Overview extends Component {
   render() {
+    const progressChartOptions = [
+      {
+        uri: "/metric/orders-progress/",
+        name: "Orders",
+        affectMetricsByTime: false,
+      },
+      {
+        uri: "/metric/styles-progress/",
+        name: "Styles",
+        affectMetricsByTime: false,
+      },
+    ]
     return (
       <div className={styles.block}>
         <FactoryOutputChart />
@@ -40,7 +52,7 @@ class Overview extends Component {
           />
         </div>
         <div className={styles['detail-cards-cont']}>
-          <ProgressCharts />
+          <ProgressCharts chartOptions={progressChartOptions} />
           <EfficiencyChart title="Factory Efficiency" />
           {/* <QualityReportChart /> */}
           <QualityReport />

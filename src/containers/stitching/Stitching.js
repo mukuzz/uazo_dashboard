@@ -16,11 +16,25 @@ class Stitching extends Component {
 	}
 
 	handleFilterStartDateChange = (event) => {
-		this.setState({filterStartDate: event.target.value})
+		let filterStartDate = event.target.value
+		let filterEndDate = this.state.filterEndDate
+		if ((new Date(filterStartDate) > (new Date(filterEndDate))))
+			filterEndDate = filterStartDate
+		this.setState({
+			filterStartDate: filterStartDate,
+			filterEndDate: filterEndDate
+		})
 	}
 
 	handleFilterEndDateChange = (event) => {
-		this.setState({filterEndDate: event.target.value})
+		let filterStartDate = this.state.filterStartDate
+		let filterEndDate = event.target.value
+		if ((new Date(filterEndDate) < (new Date(filterStartDate))))
+			filterStartDate = filterEndDate
+		this.setState({
+			filterStartDate: filterStartDate,
+			filterEndDate: filterEndDate
+		})
 	}
 
 	handleFilterOrderChange = (event) => {
@@ -36,6 +50,23 @@ class Stitching extends Component {
 	}
 
 	render() {
+		const progressChartOptions = [
+      {
+        uri: "/metric/orders-progress/",
+        name: "Orders",
+        affectMetricsByTime: true,
+      },
+      {
+        uri: "/metric/styles-progress/",
+        name: "Styles",
+        affectMetricsByTime: true,
+      },
+      {
+        uri: "/metric/lines-progress/",
+        name: "Lines",
+        affectMetricsByTime: true,
+      },
+    ]
 		return (
 			<div className={styles.block}>
 					<Filter
@@ -71,13 +102,13 @@ class Stitching extends Component {
 						]} />
 					</div> */}
 					<div className={styles['detail-cards-cont']}>
-						<ProgressCharts filter={this.state} />
+						<ProgressCharts chartOptions={progressChartOptions} filter={this.state} />
 						<EfficiencyChart title="Efficiency" filter={this.state} />
 						<QualityReport filter={this.state} />
 						<FrequentDefectsTable filter={this.state} />
 					</div>
-					<HourlyProductionTable filter={this.state} />
-					<HourlyStatsTable filter={this.state} />
+					{this.state.filterStartDate === this.state.filterEndDate ? <HourlyProductionTable filter={this.state} /> : ''}
+					{this.state.filterStartDate === this.state.filterEndDate ? <HourlyStatsTable filter={this.state} /> : ''}
 					<KeyStatsTable filter={this.state} />
 			</div>
 		);

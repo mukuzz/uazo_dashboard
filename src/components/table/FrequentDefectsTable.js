@@ -11,7 +11,7 @@ class FrequentDefectsTable extends Component {
   constructor(props){
     super(props)
     this.state = {
-      headings: ['Defect', 'Frequency', 'Line(s) Affected'],
+      headings: ['Defect', 'Frequency', 'Line # Affected'],
       data: [],
     }
   }

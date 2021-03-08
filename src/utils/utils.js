@@ -104,5 +104,10 @@ export const getUrlParamsStringFromFilter = (filter) =>  {
       paramsString += '&'
     paramsString += `order=${encodeURIComponent(filter.filterOrder)}`
   }
+  if (filter.affectMetricsByTime) {
+    if (paramsString.length > 1)
+      paramsString += '&'
+    paramsString += `affectMetricsByTime=${encodeURIComponent(filter.affectMetricsByTime)}`
+  }
   return encodeURI(paramsString)
 }

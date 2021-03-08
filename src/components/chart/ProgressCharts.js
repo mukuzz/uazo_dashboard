@@ -18,12 +18,8 @@ class ProgressCharts extends Component {
       target: [],
       produced: []
     }
-    this.chartOptions= {
-      orders: "/metric/orders-progress/",
-      styles: "/metric/styles-progress/",
-      lines: "/metric/lines-progress/",
-    }
-    this.activeChart = 'orders'
+    this.chartOptions = this.props.chartOptions
+    this.activeChart = this.chartOptions[0]
   }
 
 	componentDidMount() {
@@ -45,10 +41,15 @@ class ProgressCharts extends Component {
   }
 
   fetchData = () => {
-    const urlParams = getUrlParamsStringFromFilter(this.props.filter)
+    let filter = this.props.filter
+    if (filter){
+      filter = Object.assign({}, filter)
+      filter.affectMetricsByTime = this.activeChart.affectMetricsByTime
+    }
+    const urlParams = getUrlParamsStringFromFilter(filter)
     if (this.netReq) this.netReq.cancel()
     this.netReq = makeCancelable(
-      fetch(`${API_URL}${this.chartOptions[this.activeChart]}${urlParams}`,
+      fetch(`${API_URL}${this.activeChart.uri}${urlParams}`,
       {headers: authHeader()},
     ))
     this.netReq.promise.then(res => {
@@ -121,30 +122,18 @@ class ProgressCharts extends Component {
           <div className={styles.header}>
             <h2 className={styles.title}>Progress</h2>
             <div className={styles.filter}>
-              <button
-                data-active={this.activeChart === "orders"}
-                onClick={() => {
-                  this.activeChart = "orders"
-                  this.fetchData()
-                }}>
-                  Orders
-              </button>
-              <button
-                data-active={this.activeChart === "styles"}
-                onClick={() => {
-                  this.activeChart = "styles"
-                  this.fetchData()
-                }}>
-                  Styles
-              </button>
-              <button
-                data-active={this.activeChart === "lines"}
-                onClick={() => {
-                  this.activeChart = "lines"
-                  this.fetchData()
-                }}>
-                  Lines
-              </button>
+              {this.chartOptions.map(chartOption => {
+                return (
+                  <button key={chartOption.uri}
+                    data-active={this.activeChart.uri === chartOption.uri}
+                    onClick={() => {
+                      this.activeChart = chartOption
+                      this.fetchData()
+                    }}>
+                      {chartOption.name}
+                  </button>
+                )
+              })}
             </div>
           </div>
           <div className={styles.chart}>
