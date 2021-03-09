@@ -26,8 +26,9 @@ class Table extends Component {
 										<tr key={index} className={styles.row}>
 											{row.map((item, index) => {
 												if (index === 0 && this.props.hideConcurrentSameSrNo === true) {
+													const i = item
 													if (item === last_row_sr_value) item = ''
-													last_row_sr_value = item
+													last_row_sr_value = i
 												}
 												return <td key={index}>{item}</td>
 											})}

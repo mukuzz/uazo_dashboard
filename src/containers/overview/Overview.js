@@ -4,6 +4,12 @@ import { MetricCard, FactoryOutputChart, FrequentDefectsTable, KeyStatsTable, Ef
 
 class Overview extends Component {
   render() {
+    const startDate = new Date()
+    startDate.setHours(0,0,0,0)
+    const filter = {
+			filterStartDate: startDate,
+			filterEndDate: new Date(),
+    }
     const progressChartOptions = [
       {
         uri: "/metric/orders-progress/",
@@ -52,15 +58,15 @@ class Overview extends Component {
           />
         </div>
         <div className={styles['detail-cards-cont']}>
-          <ProgressCharts chartOptions={progressChartOptions} />
-          <EfficiencyChart title="Factory Efficiency" />
+          <ProgressCharts filter={filter} chartOptions={progressChartOptions} />
+          <EfficiencyChart filter={filter} title="Factory Efficiency" />
           {/* <QualityReportChart /> */}
-          <QualityReport />
-          <FrequentDefectsTable />
+          <QualityReport filter={filter} />
+          <FrequentDefectsTable filter={filter} />
         </div>
-        <HourlyProductionTable />
-        <HourlyStatsTable />
-        <KeyStatsTable />
+        <HourlyProductionTable filter={filter} />
+        <HourlyStatsTable filter={filter} />
+        <KeyStatsTable filter={filter} />
       </div>
     );
   }
