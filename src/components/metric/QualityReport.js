@@ -34,6 +34,7 @@ class QualityReport extends Component {
       defectivePercentage: "0.00%",
       rectifiedPercentage: "0.00%",
       rejectedPercentage: "0.00%",
+      dhu: 0.00,
     }
   }
 
@@ -58,7 +59,7 @@ class QualityReport extends Component {
     const urlParams = getUrlParamsStringFromFilter(this.props.filter)
     if (this.netReq) this.netReq.cancel()
     this.netReq = makeCancelable(
-      fetch(`${API_URL}/metric/qc-actions/${urlParams}`,
+      fetch(`${API_URL}/metric/quality-report/${urlParams}`,
       {headers: authHeader()})
     )
     this.netReq.promise.then(res => {
@@ -77,6 +78,7 @@ class QualityReport extends Component {
             defectivePercentage: data.defective_percentage,
             rectifiedPercentage: data.rectified_percentage,
             rejectedPercentage: data.rejected_percentage,
+            dhu: data.dhu,
           })
         }
       },
@@ -93,6 +95,7 @@ class QualityReport extends Component {
         <ReportItem title="Defective" metric={this.state.defective} metricPer={this.state.defectivePercentage} color="#EFB700" />
         <ReportItem title="Rectified" metric={this.state.rectified} metricPer={this.state.rectifiedPercentage} color="#336dc4" hoverText="Percentage of defective rectified" />
         {/* <ReportItem title="Rejected" metric={this.state.rejected} metricPer={this.state.rejectedPercentage} color="#B81D13" /> */}
+        <ReportItem title="DHU" metric={this.state.dhu} />
       </div>
     )
     return (
