@@ -11,7 +11,7 @@ class FrequentDefectsTable extends Component {
   constructor(props){
     super(props)
     this.state = {
-      headings: ['Defect', 'Frequency', 'Line # Affected'],
+      headings: ['Part / Defect', 'Frequency', 'Line # Affected'],
       data: [],
     }
   }
@@ -37,7 +37,7 @@ class FrequentDefectsTable extends Component {
     const urlParams = getUrlParamsStringFromFilter(this.props.filter)
     if (this.netReq) this.netReq.cancel()
     this.netReq = makeCancelable(
-      fetch(`${API_URL}/metric/frequent-defects/${urlParams}`,
+      fetch(`${API_URL}/metric/frequent-operation-defects/${urlParams}`,
       {headers: authHeader()})
     )
     this.netReq.promise.then(res => {

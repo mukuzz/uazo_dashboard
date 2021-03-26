@@ -12,7 +12,7 @@ class EfficiencyChart extends Component {
 
   constructor(props) {
 		super(props)
-		this.state = {target: 0, actual: 0, hitRate: 0}
+		this.state = {target: "0.00%", actual: "0.00%", efficiencyRealized: 0}
   }
   
   componentDidMount() {
@@ -46,18 +46,18 @@ class EfficiencyChart extends Component {
     .then(
       (data) => {
         if (data) {
-          let hitRate = 0
+          let efficiencyRealized = 0
           if (data.target === 0 || data.actual === 0)
-            hitRate = 0
-          else {           
-            const per = data.actual / data.target * 100
-            if (isNaN(per)) hitRate = 0
-            else hitRate = per
+            efficiencyRealized = 0
+          else {
+            const per = parseFloat(data.actual) / parseFloat(data.target) * 100
+            if (isNaN(per)) efficiencyRealized = 0
+            else efficiencyRealized = per
           }
           this.setState({
             actual: data.actual,
             target: data.target,
-            hitRate: hitRate,
+            efficiencyRealized: efficiencyRealized,
           })
         }
       },
@@ -79,17 +79,17 @@ class EfficiencyChart extends Component {
             trailWidth={6}
             strokeLinecap="round"
             percent={(() => {
-              if (this.state.hitRate > 100) return 100
-              else return this.state.hitRate
+              if (this.state.efficiencyRealized > 100) return 100
+              else return this.state.efficiencyRealized
             })()}
           />
           <div className={styles.stat}>
-            <h4>{this.state.actual.toFixed(2)}%</h4>
-            <p>Target: {this.state.target.toFixed(2)}%</p>
+            <h4>{this.state.actual}</h4>
+            <p>Target: {this.state.target}</p>
           </div>
         </div>
         
-        <div className={styles.footer}><h4>Efficiency Realized (Pct): <strong>{this.state.hitRate.toFixed(2)}%</strong></h4></div>
+        <div className={styles.footer}><h4>Efficiency Realized (Pct): <strong>{this.state.efficiencyRealized.toFixed(2)}%</strong></h4></div>
       </div>
     )
     return (
