@@ -76,7 +76,12 @@ class Login extends Component {
         this.setState({message: 'Some error occurred'})
       }
     )
-    .finally(() => this.setState({processing: false}));
+    .finally(() => {
+      this.setState({processing: false})
+      const {setUserLogInState} = this.context
+      setUserLogInState(true)
+      this.props.history.push('/')
+    });
   }
 
   render() {

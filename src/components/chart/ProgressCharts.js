@@ -14,9 +14,9 @@ class ProgressCharts extends Component {
   constructor(props){
     super(props)
     this.state = {
-      labels: [],
-      target: [],
-      produced: []
+      labels: ["Jeans #23", "Shirt#12", "Shirt#33"],
+      target: [200, 340, 350],
+      produced: [130, 110, 305]
     }
     this.chartOptions = this.props.chartOptions
     this.activeChart = this.chartOptions[0]
@@ -59,9 +59,9 @@ class ProgressCharts extends Component {
     .then(
       (data) => {
         if (data) {
-          const labels = []
-          const target = []
-          const produced = []
+          const labels = ["Jeans #23"]
+          const target = [200]
+          const produced = [130]
           // TODO: trim label if too big
           data.data.forEach(po => {
             labels.push(po.label)

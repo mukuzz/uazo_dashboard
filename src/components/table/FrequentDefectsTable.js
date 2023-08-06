@@ -69,7 +69,7 @@ class FrequentDefectsTable extends Component {
         hideConcurrentSameSrNo={false}
         tableName="Frequent Defects"
         headings={this.state.headings}
-        tableData={this.state.data}
+        tableData={[["Hem", 2, 1], ["Sleeve", 3, 2], ["Button", 1, 1], ["Cuff", 2, 2]]}
       />
     );
   }

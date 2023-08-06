@@ -12,7 +12,7 @@ class EfficiencyChart extends Component {
 
   constructor(props) {
 		super(props)
-		this.state = {target: "0.00%", actual: "0.00%", efficiencyRealized: 0}
+		this.state = {target: "60.00%", actual: "45.00%", efficiencyRealized: 45/60*100}
   }
   
   componentDidMount() {

@@ -26,15 +26,15 @@ class QualityReport extends Component {
   constructor(props){
     super(props)
     this.state = {
-      ftt: 0,
-      defective: 0,
-      rectified: 0,
-      rejected: 0,
-      fttPercentage: "0.00%",
-      defectivePercentage: "0.00%",
-      rectifiedPercentage: "0.00%",
-      rejectedPercentage: "0.00%",
-      dhu: 0.00,
+      ftt: 126,
+      defective: 2,
+      rectified: 3,
+      rejected: 1,
+      fttPercentage: "96.00%",
+      defectivePercentage: "1.50%",
+      rectifiedPercentage: "2.00%",
+      rejectedPercentage: "1.00%",
+      dhu: 2.00,
     }
   }
 

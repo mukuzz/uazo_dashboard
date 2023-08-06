@@ -17,8 +17,8 @@ class FactoryOutputChart extends Component {
   constructor(props){
     super(props)
     this.state = {
-      labels: [],
-      data: [],
+      labels: [1691178732, 1691178733, 1691178734, 1691178735, 1691178736, 1691178737, 1691178738, 1691178739, 1691178740],
+      data: [234,34,66,234,112,236,158,234,136],
     }
     this.startTime = ''
     this.endTime = ''

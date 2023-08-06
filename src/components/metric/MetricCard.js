@@ -11,7 +11,7 @@ class MetricCard extends Component {
 
 	constructor(props) {
 		super(props)
-		this.state = {"data": "-"}
+		this.state = {"data": this.props}
 	}
 
 	componentDidMount() {
@@ -52,7 +52,7 @@ class MetricCard extends Component {
 				<div className={styles.block}>
 					<div>
 						<h2 className={styles.h2}>{this.props.metricName}</h2>
-						<h3 className={styles.h3}>{this.state.data.toLocaleString()}</h3>
+						<h3 className={styles.h3}>{this.props.value}</h3>
 					</div>
 				</div>
 			</Card>
